@@ -17,5 +17,7 @@ keypoints:
 ---
 FIXME
 
+https://urbit.org/docs/arvo/concepts/subscriptions
+
 {% include links.md %}
 
