@@ -7,15 +7,15 @@
 # dc: Data Carpentry
 # lc: Library Carpentry
 # cp: Carpentries (to use for instructor traning for instance)
-carpentry: "incubator"
+carpentry: "cp"
 
 # Overall title for pages.
-title: "Lesson Title" # FIXME
+title: "Urbit for Developers"
 
 # Life cycle stage of the lesson
 # See this page for more details: https://cdh.carpentries.org/the-lesson-life-cycle.html
 # Possible values: "pre-alpha", "alpha", "beta", "stable"
-life_cycle: "pre-alpha"
+life_cycle: "alpha"
 
 #------------------------------------------------------------
 # Generic settings (should not need to change).
@@ -30,7 +30,7 @@ kind: "lesson"
 repository: <USERNAME>/<PROJECT>
 
 # Email address, no mailto:
-email: "team@carpentries.org" # FIXME
+email: "Neal.Davis@protonmail.com"
 
 # Sites.
 amy_site: "https://amy.carpentries.org/"
@@ -58,7 +58,7 @@ instructor_post_survey: "https://www.surveymonkey.com/r/instructor_training_post
 
 
 # Start time in minutes (0 to be clock-independent, 540 to show a start at 09:00 am).
-start_time: 0
+start_time: 780
 
 # Specify that things in the episodes collection should be output.
 collections:
