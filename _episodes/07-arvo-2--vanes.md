@@ -15,7 +15,7 @@ keypoints:
 - "Vanes communicate by means of events."
 - "`%ames` provides network communications including peer-to-peer events."
 - "`%clay` instruments a typed version-controlled filesystem."
-- "`%eyre` and `%iris` together offer client and server operations.
+- "`%eyre` and `%iris` together offer client and server operations."
 - "`%khan` is the external control plane."
 ---
 FIXME

@@ -13,12 +13,13 @@ objectives:
 - "Diagram Hoon generators into the corresponding abstract syntax tree."
 - "Compose a simple generator and load it from `gen/`."
 - "Understand how to pass arguments to and results from gates."
-- "Produce a generator for a mathematical calculation.""
+- "Produce a generator for a mathematical calculation."
 keypoints:
 - "Mars (Urbit) is hermetically sealed from Earth except for system calls."
 - "Hoon structures all programs as binary trees of Nock."
 - "The `%clay` vane acts as a file system for Urbit."
 ---
+
 FIXME
 
 {% include links.md %}
