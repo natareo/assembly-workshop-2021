@@ -668,7 +668,7 @@ If we \texttt{cd} into the ship's pier in Unix and \texttt{ls} the directory con
 |mount %
 \end{lstlisting}
 
-where \texttt{%} represents the current (home) path in \clay.  Unix-side, run \texttt{ls} again and a \texttt{home/} directory appears with a number of children:  \texttt{app/}, \texttt{gen/}, \texttt{lib/}, \texttt{mar/}, and so forth.  This is the internal esoteric structure of \clay~made manifest to Unix.
+where `%` represents the current (home) path in \clay.  Unix-side, run \texttt{ls} again and a \texttt{home/} directory appears with a number of children:  \texttt{app/}, \texttt{gen/}, \texttt{lib/}, \texttt{mar/}, and so forth.  This is the internal esoteric structure of \clay~made manifest to Unix.
 
 \marginnote[2mm]{\clay~implements several \emph{desks}, which are like branches in version control systems; the most important of these are \chome~and \ckids.}
 Generally speaking, we compose \emph{generators}, which are short Hoon scripts.  These are created in or copied into the \texttt{home/mar/} directory, and then must be synchronized with Urbit's \clay.  Commit the change:
