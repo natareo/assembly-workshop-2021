@@ -14,5 +14,6 @@ keypoints:
 ---
 FIXME
 
-{% include links.md %}
+- [“External API Reference”](https://urbit.org/docs/arvo/eyre/external-api-ref)
 
+{% include links.md %}

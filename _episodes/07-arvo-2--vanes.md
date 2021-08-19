@@ -23,80 +23,39 @@ keypoints:
 
 Each vane has a characteristic structure which identifies it as a vane to Arvo and allows it to handle moves consistently.  Most operations are one of three things:
 
-1. A _scry_ or request for data (`++peek`).
+1. A _scry_ or request for data (`++peek` or `++scry` or `++on-peek`).
 2. An update (`++poke`).
 3. An evaluation (of a core) (`++wish`).
 
-In order to orient yourself around the kinds of things the Urbit OS does, it is worth a brief tour of the Arvo vanes.
+In order to orient yourself around the kinds of things the Urbit OS does, it is worth a brief tour of the Arvo vanes.  Each vane offers a particular system service.  These are sometimes represented schematically as the kernel layer around the Arvo state machine:
+
+![](https://media.urbit.org/site/understanding-urbit/technical-overview/technical-overview-kernel@2x.png)
 
 ### `%ames`, A Network
 
 In a sense, `%ames` is the operative definition of an urbit on the network.  That is, from outside of one's own urbit, the only specification that must be hewed to is that `%ames` behaves a certain way in response to events. TODO
 
-`%ames` implements a system expecting—and delivering—guaranteed one-time delivery.  This derives from an observation by \citeauthor{Yarvin2016}~in the Whitepaper:  "bus v. commands whatever"
+`%ames` implements a system expecting—and delivering—guaranteed one-time delivery.  This derives from an observation by \citeauthor{Yarvin2016}~in the Whitepaper:
 
-UDP packet structure
+> There is a categorical difference between a bus, which transports commands, and a network, which transports packets. You can drop a packet but not a command; a packet is a fact and a command is an order. To send commands over a wire is unforgivable: you’ve turned your network into a bus. Buses are great, but networks are magic.
+>
+> Facts are inherently idempotent; learning fact X twice is the same as learning it once. You can drop a packet, because you can ignore a fact. Orders are inherently sequential; if you get two commands to do thing X, you do thing X twice.
 
-network events
-acks \& nacks
-
-\subsection{Scrying into \ames}
-\labsec{kr:a:scry}
-
-`%ames` scry
-
-\begin{table}[h!]
-  \begin{center}
-    \caption{`%ames` \dotket~Calls.}
-    \label{ha:ames}
-    \begin{tabular}{lll}
-      Symbol & Meaning & Example \\
-      \hline \\
-      \texttt{\%x} & Get ship and peer information:  protocol version, peers, ship state, etc. & \\
-    \end{tabular}
-  \end{center}
-\end{table}
+`%ames` communicates using the UDP protocol.  Scries into `%ames` typically locate ship and peer information, protocol version, ship state, etc.
 
 
-\section[\behn]{\behn, A Timer}
-\labsec{behn}
+### `%behn`, A Timer
 
-`%behn` is a simple vane that promises to emit events after—but never before—their timestamp.  This guarantee
+`%behn` is a simple vane that promises to emit events after—but never before—their timestamp.  This is used as a wake-up timer for many deferred events.  `%behn` maintains an event handler and a state.
 
 As the shortest vane, we commend `%behn` to the student as an excellent subject for a first dive into the structure of a vane.
 
-`%behn` maintains an event handler and a state.
+`%behn` scries retrieve timers, timestamps, next timer to fire, etc.
 
-Any task may have one of the following states:
 
-\begin{lstlisting}
-%born  born:event-core
-%rest  (rest:event-core date=p.task)
-%drip  (drip:event-core move=p.task)
-%huck  (huck:event-core syn.task)
-%trim  trim:event-core
-%vega  vega:event-core
-%wait  (wait:event-core date=p.task)
-%wake  (wake:event-core error=~)
-\end{lstlisting}
+### `%clay`, A File System
 
-\subsection{Scrying into \behn}
-\labsec{kr:b:scry}
-
-\begin{table}[h!]
-  \begin{center}
-    \caption{`%behn` \dotket~Calls.}
-    \label{ha:behn}
-    \begin{tabular}{lll}
-      Symbol & Meaning & Example \\
-      \hline \\
-      \texttt{\%x} & Get timers, timestamps, next timer to fire, etc. & \\
-    \end{tabular}
-  \end{center}
-\end{table}
-
-\section[`%clay` ]{`%clay` , A File System}
-\labsec{clay}
+`%clay` is one of the most significant vanes in Arvo.  `%clay` is a global-namespace typed version-control filesystem, meaning that it TODO
 
 https://github.com/davis68/martian-computing/blob/78dce6435f645f2135f09e228062a1371cf2ef9d/lessons/lesson22-clay-2.md
 
@@ -167,32 +126,22 @@ marks
 % https://urbit.org/blog/ford-fusion/
 
 
-\subsection[`=ford` ]{`++ford` , A Build System}
-\labsec{ford}
+### `++ford` , A Build System
 
-runes
-%https://urbit.org/blog/ford-fusion/
+`++ford` builds code (either from the Dojo, from a library, from an app, etc.). `++ford` used to be a standalone vane but was integrated into `%clay` [a year or so ago](https://urbit.org/blog/ford-fusion/).
 
-\begin{table}[h!]
-  \begin{center}
-    \caption{`++ford` ~Runes.}
-    \label{ha:ford}
-    \begin{tabular}{lll}
-      Symbol & Meaning & Example \\
-      \hline \\
-      \texttt{/-} & Import structure file from \texttt{sur}. & \\
-      \texttt{/+} & Import library file from \texttt{lib}. & \\
-      \texttt{/=} & Import user-specified file. & \\
-      \texttt{/*} & Import contents of file converted by mark. & \\
-    \end{tabular}
-  \end{center}
-\end{table}
+`++ford` provides a number of runes for building and importing code into a subject:
 
-importing with \texttt{*} is w/o face, foo=bar
+- `/-`:  Import structure file from `sur`.
+- `/+`:  Import library file from `lib`.
+- `/=`:  Import user-specified file.
+- `/*`:  Import contents of file converted by mark.
 
+TODO importing with \texttt{*} is w/o face, foo=bar
 
-\subsection[Marks]{Marks and conversions}
-\labsec{kr:c:marks}
+### Marks and conversions
+
+TODO
 
 \subsection{Exercises}
 \labsec{kr:c:exercises}
@@ -208,122 +157,35 @@ Use ++ford to produce a tube from hoon to txt.
 Answer this question with the expression.
 
 
-\section[`%dill` ]{`%dill` , A Terminal driver}
-\labsec{dill}
+### `%dill` , A Terminal Driver
 
-\subsection{Scrying into `%dill` }
-\labsec{kr:d:scry}
-
-`%dill` ~scrys are unusual, in that they are typically only necessary for fine-grained Arvo control of the display.  Even command-line apps instrumented with \shoe~do not call into `%dill` ~commonly.  The only instance of use in the current Arvo kernel is in Herm, the terminal session manager.
-
-\begin{table}[h!]
-  \begin{center}
-    \caption{`%dill` ~\dotket~Calls.}
-    \label{ha:dill}
-    \begin{tabular}{lll}
-      Symbol & Meaning & Example \\
-      \hline \\
-      \texttt{\%x} & Get the current line or cursor position of default session. & \\
-    \end{tabular}
-  \end{center}
-\end{table}
+`%dill` handles keypress events generated from the keyboard or telnet.  This includes the state of the terminal window (size, shape, etc.) and keystroke-by-keystroke events.  `%dill` scrys are unusual, in that they are typically only necessary for fine-grained Arvo control of the display.  Even command-line apps instrumented with `%shoe` do not call into `%dill` commonly.  The only instance of use in the current Arvo kernel is in Herm, the terminal session manager.
 
 
-\section[`%eyre` ~\&~`%iris` ]{`%eyre` ~and `%iris` , Server and Client Vanes}
-\labsec{eyre}
+### `%eyre` and `%iris`, Server and Client Vanes
 
-\subsection{Scrying into `%eyre` }
-\labsec{kr:e:scry}
+`%eyre` handles HTTP requests from clients.  For instance, `%eyre` handles session cookies for the browser.  `%eyre` is also the main interface for `%gall` agents to the outside world.  Channels are defined as pipelines from external HTTP clients to `%eyre` as a thin layer over `%gall` agents, and back again.
 
-`%eyre` ~
+`%iris` handles HTTP requests from servers.  For instance, `%iris` can fetch remote HTTP resources (`HTTP GET` command).
 
-\begin{table}[h!]
-  \begin{center}
-    \caption{`%jael` ~\dotket~Calls.}
-    \label{ha:iris}
-    \begin{tabular}{lll}
-      Symbol & Meaning & Example \\
-      \hline \\
-      \texttt{\%x} & Get CORS etc TODO. & \\
-      \texttt{\%\$} & Get . & \\  % TODO is this default subject?
-    \end{tabular}
-  \end{center}
-\end{table}
-
-\subsection{Scrying into `%iris` }
-\labsec{kr:i:scry}
-
-\begin{table}[h!]
-  \begin{center}
-    \caption{`%iris` ~\dotket~Calls.}
-    \label{ha:iris}
-    \begin{tabular}{lll}
-      Symbol & Meaning & Example \\
-      \hline \\
-      \texttt{\%\$} & Get . & \\  % TODO is this default subject?
-    \end{tabular}
-  \end{center}
-\end{table}
-
-\section[`%jael` ]{`%jael` , Secretkeeper}
-\labsec{jael}
-
-\marginnote[2mm]{
-`%jael`  is named after Jael, the wife of Heber, who kept mum and slew fleeing enemy general Sisera in Judges 4.  It also puns on “jail”.
-}
-
-`%jael` ~keeps secrets, the cryptographic keys that make it possible to securely control your Urbit.  Among other cryptographic facts, `%jael` ~keeps track of the following:
-
-\begin{enumerate}
-  \item  Subscription to \texttt{\%azimuth-tracker}, the current state of the Azimuth PKI.
-  \item  Initial public and private keys for the ship.
-  \item  Public keys of all galaxies.
-  \item  Record of Ethereum registration for Azimuth.
-\end{enumerate}
-
-`%jael` ~weighs in as one of the shorter vanes, but is critical to Urbit as a secure network-first operating system.  `%jael` ~is in fact the first vane loaded after `%dill` ~when bootstrapping Arvo on a new instance.
-
-\begin{lstlisting}
-
-\end{lstlisting}
+- [“`%eyre` Tutorial”](https://urbit.org/docs/arvo/eyre/eyre)
+- [“`%iris` Tutorial”](https://urbit.org/docs/arvo/iris/iris)
+- [“External API Reference”](https://urbit.org/docs/arvo/eyre/external-api-ref)
 
 
-record the Ethereum block the public key is registered to,
-record the URL of the Ethereum node used,
-save the signature of the parent planet (if the ship is a moon),
-load the initial public and private keys for the ship,
-set the DNS suffix(es) used by the network (currently just arvo.network),
-save the public keys of all galaxies,
-set Jael to subscribe to %azimuth-tracker,
-%slip a %init task to Ames, Clay, Gall, Dill, and Eyre, and %give an %init gift to Arvo, which then informs Unix that the initialization process has concluded.
+### `%jael` , Secretkeeper
 
-~master-morzod
-1:00 PM
-the private key (ring) is 64 bytes, plus a tag byte
-1:00
-(met 3 sec:ex:(pit:nu:crub:crypto 512 eny))
-65
-the ship is up to 64 bits (or 128, if you want to support comet keypairs, which you could)
-\begin{lstlisting}
-=/  ,seed:jael  [who=`@p`0 lyf=1 sek=(bex 520) ~]  (met 3 (scot %uw (jam -)))
-=/  ,seed:jael  [who=`@p`(bex 127) lyf=(bex 31) sek=(bex 520) ~]  (met 3 (scot %uw (jam -)))
-\end{lstlisting}
-likely lower and upper bounds
+`%jael` keeps secrets, the cryptographic keys that make it possible to securely control your Urbit.  Among other cryptographic facts, `%jael` keeps track of the following:
 
+- Subscription to `%azimuth-tracker`, the current state of the Azimuth PKI.
+- Initial public and private keys for the ship.
+- Public keys of all galaxies.
+- Record of Ethereum registration for Azimuth.
 
-\href{https://urbit.org/docs/arvo/jael/jael-api/}{`%jael` ~API Reference}
+`%jael` weighs in as one of the shorter vanes, but is critical to Urbit as a secure network-first operating system.  `%jael` is in fact the first vane loaded after `%dill` when bootstrapping Arvo on a new instance.
 
+- [“`%jael` API Reference”](https://urbit.org/docs/arvo/jael/jael-api/)
 
-
-\subsection{Scrying into `%jael` }
-\labsec{kr:j:scry}
-
-
-
-
-\marginnote[2mm]{
-Sometimes residual elements of vane development leak into release code and yield insight into how the kernel developers produce new vanes.  For instance, when a new version of `%jael` ~was being developed, it was dubbed \texttt{kale} and used the scry path \texttt{\%k}.  This made it into a release version of \texttt{lib/ring} in Arvo 309 K.
-}
-
+![](https://miro.medium.com/max/1838/1*GW2fC3gQxz97B45EFkNA6Q.png)
 
 {% include links.md %}
