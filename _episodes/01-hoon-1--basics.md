@@ -697,7 +697,7 @@ Write a \say~generator which simulates scoring a simple dice throw of $n$ six-si
 
 Since Hoon is functional but random number generators stateful, you should use the \ptisket~rune to replace the current value in the RNG.  \tisket~is a kind of "one-effect monad," which allows you to change a single part of the subject.
 
-For instance, here is a generator that returns a list of probabilities from 1–100%.
+For instance, here is a generator that returns a list of _n_ probabilities between 0–100%.
 
 \begin{lstlisting}
 :-  %say
