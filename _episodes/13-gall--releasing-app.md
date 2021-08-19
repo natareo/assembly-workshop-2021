@@ -11,7 +11,25 @@ objectives:
 keypoints:
 - "The Urbit software distribution service affords a straightforward way to deploy, update, and remove `%gall` apps."
 ---
-FIXME
+
+##  Installing an App
+
+What makes a regular `%gall` app into a deployed app?  In the past, anyone wanting to use a `%gall` app has needed to access a repo, copy the files down into `app/`, and manually start the app.  With `%docket`, you are able to automate most of this process.
+
+
+
+##  Releasing an App
+
+Now that you have seen how to install an app onto your local ship, let's look at how to set up and deploy your own app onto the network.
+
+The first thing we need to do is create a new desk in `%clay` which will hold all of the relevant information about the app, including files and metadata.
+
+```hoon
+|
+```
+
+```hoon
+|install ~magbel %example
+```
 
 {% include links.md %}
-

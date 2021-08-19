@@ -12,5 +12,8 @@ keypoints:
 ---
 FIXME
 
-{% include links.md %}
+Arvo defines a number of standard operations for each vane.  Notable among these are `++peek`, which grants read-only access to data, called a _scry_; and `++poke`, which accepts moves and processes them.  Pokes actually alter Arvo's state (rather than just retrieve information).
 
+Generally speaking, the Urbit data flow model is _reactive_, meaning that rather than poll for updates periodically one _subscribes_ to a data source which notifies all subscribers when a change occurs.
+
+{% include links.md %}
