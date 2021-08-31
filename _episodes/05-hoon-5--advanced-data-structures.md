@@ -6,8 +6,8 @@ questions:
 - "How are structured data typically represented, populated, and accessed in Hoon?"
 - "Which common patterns in Hoon exist?"
 objectives:
-- "Identify common Hoon molds: units, sets, maps, jars, and jugs."
-- "Explore the standard library’s functionality: text parsing & processing, functional hacks, randomness, hashing, time, and so forth."
+- "Identify common Hoon molds:  units, sets, maps, jars, and jugs."
+- "Explore the standard library’s functionality:  text parsing & processing, functional hacks, randomness, hashing, time, and so forth."
 keypoints:
 - "Doors generalize the notion of a gate to a gate-factory."
 - "Units, sets, maps, jars, and jugs provide a principled way to access and operate on data."
@@ -42,7 +42,7 @@ Units mitigate this situation by acting as a type union of \sig~(for no result) 
 \subsubsection{Dimes}
 \labsec{he:dime}
 
-jars, jugs
+jars, jugs  OPtional
 
 
 {% include links.md %}

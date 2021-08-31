@@ -3,7 +3,6 @@
 
 ![](https://pbs.twimg.com/media/E8c4z59WEAEWZ0a?format=jpg&name=medium)
 
-
 ##  Objectives
 
 1. Program literately using the Hoon language, including source code conventions and interoperability.
@@ -21,8 +20,19 @@ Software developers in attendance at Assembly in Austin, Texas.  These all have 
 1. Those with little to no experience with software development in Hoon and on the Urbit platform.
 2. Those with Hoon School-tier exposure to the Hoon programming language.
 
+We have capped the workshop at 90 participants for classroom management.
+
 
 ##  Outline
+
+NO LESSON PLAN SURVIVES CONTACT WITH THE CLASSROOM
+
+Our meta goals for each day are:
+
+- **Day 1** To have you thinking in terms of symbols and computational trees.
+- **Day 2** To have you thinking in terms of agent operations.
+
+We're not going to argue about why something is the way it is.  Hoon has been written, and for most of the things you encounter there is a reasoned motivation for why the decision was made to structure it the way it is.  You may disagree with that motivation, but that's an entirely separate discussion.  This .. is .. HOON!!!
 
 - Hoon (_The Hoon section aims to teach the ~25 most common runes, the core pattern, and code building._)
   - Basic runes
