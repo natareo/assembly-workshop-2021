@@ -19,6 +19,11 @@ permalink: index.html  # Is the only page that doesn't follow the pattern /:path
 
 We will _not_ deal with Azimuth, parsing, many aspects of generators, event logs, runtime issues, and many other aspects of fully grokking Urbit.
 
+NO LESSON PLAN SURVIVES CONTACT WITH THE CLASSROOM _but_ our meta goals for each day are:
+
+- **Day 1** To have you thinking in terms of symbols and computational trees.
+- **Day 2** To have you thinking in terms of agent operations.
+
 
 ##  Audience
 

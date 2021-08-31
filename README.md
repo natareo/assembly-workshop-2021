@@ -25,9 +25,7 @@ We have capped the workshop at 90 participants for classroom management.
 
 ##  Outline
 
-NO LESSON PLAN SURVIVES CONTACT WITH THE CLASSROOM
-
-Our meta goals for each day are:
+NO LESSON PLAN SURVIVES CONTACT WITH THE CLASSROOM _but_ our meta goals for each day are:
 
 - **Day 1** To have you thinking in terms of symbols and computational trees.
 - **Day 2** To have you thinking in terms of agent operations.
