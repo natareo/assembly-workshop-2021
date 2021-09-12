@@ -15,7 +15,7 @@ keypoints:
 
 On the first day, we talked about bones and trunks and ivory.  Today we're going to meet an elephant.
 
-![](./img/elephant-noloop.gif)
+![](../img/elephant-noloop.gif)
 
 Unfortunately, there's not really a good way to modulate the sudden jump in complexity we're encountering now.  You can't really build an airplane from just a wing:  you have to leap from "wing" to "airplane" in one go.
 
