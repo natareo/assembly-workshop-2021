@@ -165,7 +165,7 @@ For each of the following, we assume the following set has been defined in Dojo:
 
     (Note that these are not in the same order.)
 
-- Convert to list:
+- Convert to list of pairs:
 
     ```hoon
     ~(tap by greek)
@@ -232,6 +232,16 @@ Hoon has built-in support for parsing and exporting JSON-styled data.
 TODO
 ```
 
+Hoon parses JSON in two passes:  first, the JSON is converted in the raw to a tagged data structure using `++de-json:html`.  After this, schema-specific parsers are used to deconstruct the tagged data into usable components with `++dejs:format`.  _This gets a little complicated_, and we'll revisit it tomorrow as well when we need it.
+
+The first part is relatively straightforward.  Given a `cord` (`@t`) of JSON data, parse it to a tagged `json` data structure:
+
+```hoon
+```
+
+JSON is a structured data type, however, so one cannot generically process it into particular values.  One must know and account for the expected structure.
+
+- [~timluc-miptev, “Call from Outside:  JSON & `chanel.js`”](https://github.com/timlucmiptev/gall-guide/blob/master/chanel.md)
 - [“Fetch JSON”](https://urbit.org/docs/userspace/threads/examples/get-json)
 
 ### Randomness

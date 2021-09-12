@@ -11,5 +11,6 @@ keypoints:
 ---
 FIXME
 
-{% include links.md %}
+https://urbit.org/docs/userspace/graph-store/sample-application-overview
 
+{% include links.md %}

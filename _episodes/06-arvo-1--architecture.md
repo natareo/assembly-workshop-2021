@@ -12,6 +12,15 @@ keypoints:
 - "Events are well-defined single operations on the system state."
 - "The binary executable is separated into king and serf, the system state, an event log and runtime support."
 ---
+
+Urbit bills itself as a “XXX operating function.”  Now that you have some of the syntax of Hoon under your belt, we can examine what the kernel does to implement these features.  In brief, these are the selling points I make to any developer who asks, “Why bother with Urbit?”
+
+1. Cryptographic identity.
+2. Version-controlled typed filesystem.
+3. Authentication primitives.
+4. Persistent database.
+TODO pull that dcSpark tweet thread
+
 We could do worse than to start our exploration of the Urbit kernel than to quote the Whitepaper itself on the subject of Arvo:
 
 \begin{quote}
