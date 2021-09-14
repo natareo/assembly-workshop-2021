@@ -70,6 +70,8 @@ The atom/aura system represents all simple data types in Hoon:  dates, floating-
 | `116` `105` `98` `114` `85` (ASCII characters) |
 | `t` `i` `b` `r` `U` |
 
+![](./img/atom-cord.png)
+
 Note in the above that leading zeroes are always stripped.  Since each atom is an integer, there is no way to distinguish `0` from `00` from `000` etc.
 
 In this vein, it's worth remembering that Dojo automatically parses any typed input and disallows invalid representations.  This can lead to confusion until you are accustomed to the type signatures; for instance, try to type `0b0001` into Dojo.
@@ -115,24 +117,106 @@ The Hoon standard library, largely in defined in `%zuse`, further defines bitwis
 
 All structures in Nock are binary trees; thus also Hoon.  This can occasionally lead to some awkward addressing when composing tetchy library code segments that need to interface with many different kinds of gates, but by and large is an extremely helpful discipline of thought.
 
-TODO
-binary tree format
-flattened representation/convention
+![](./img/binary-tree.png)
 
-Hoon values are addressed as elements in a binary tree.
+For instance, a list of characters (or `tape`, one of Hoon's string types) can be addressed directly by the rightward-branching cell addresses or via a convenience notation (which is more intuitive).
 
-TODO
+![](./img/binary-tree-tape.png)
 
-Finally, the most general mold is \texttt{*} which simply matches any noun—and thus anything in Hoon at all.
+```hoon
+> +1:"hello"
+i="hello"
+> +2:"hello"
+i='h'
+> +3:"hello"
+t="ello"
+> +4:"hello"
+dojo: hoon expression failed
+> +5:"hello"
+dojo: hoon expression failed
+> +6:"hello"
+i='e'
+> +7:"hello"
+t="llo"
+> +15:"hello"
+t="l"
+> +16:"hello"
+t="lo"
+> +30:"hello"
+t="l"
+> +31:"hello"
+t="o"
+> +62:"hello"
+i='o'
+> +63:"hello"
+t=""
+> +127:"hello"
+dojo: hoon expression failed
+>
+>
+>
+> &1:"hello"
+i='h'
+> &2:"hello"
+i='e'
+> &3:"hello"
+i='l'
+> &4:"hello"
+i='l'
+> &5:"hello"
+i='o'
+```
 
+More commonly than direct numerical addressing (of either form), however, is _lark addressing_, which is quirky.  The head and tail of each cell are selected by alternating `+`/`-` and `<`/`>` pairs, which is readable once you know what you're looking at.
 
-> ##  Hoon as Nock Macro
+```hoon
+> =hello "hello"
+> -.hello
+i='h'
+> +.hello
+t="ello"
+> -<.hello
+dojo: hoon expression failed
+> ->.hello
+dojo: hoon expression failed
+> +<.hello
+i='e'
+> +>.hello
+t="llo"
+> +>-.hello
+i='l'
+> +>+.hello
+t="lo"
+> +>+<.hello
+i='l'
+> +>+>.hello
+t="o"
+> +>+>-.hello
+i='o'
+> +>+>+.hello
+t=""
+```
+
+Finally, the most general mold is \texttt{*} which simply matches any noun—and thus anything in Hoon at all.  The `*` applied to a value yields the _bunt_, or default empty definition.
+
+```hoon
+> *@ud
+0
+> *@ux
+0x0
+> *add
+0
+> *mul
+1
+```
+
+> ##  Hoon as Nock Macro (Optional)
 >
 > The point of employing Hoon is, of course, that Hoon compiles to Nock.  Rather than even say _compile_, however, we should really just say Hoon is a _macro_ of Nock.  Each Hoon rune, data structure, and effect corresponds to a well-defined Nock primitive form.  We may say that Hoon is to Nock as C is to assembler, except that the Hoon-to-Nock transformation is completely specified and portable.  Hoon is ultimately defined in terms of Nock; many Hoon runes are defined in terms of other more fundamental Hoon runes, but all runes parse unambiguously to Nock expressions.
 >
-> Hoon expands on Nock primarily through the introduction of metadata
+> Hoon also expands on Nock through the introduction of metadata, such as auras and core annotations.  The Hoon compiler enforces conventions to aid the programmer.
 >
-> Each Hoon rune has an unambiguous mapping to a Nock representation.  Furthermore, each rune has a well-defined binary tree structure and produces a similarly well-structured abstract syntax tree (AST).  As we systematically introduce runes, we will expand on what this means in each case:  for now, let's examine two runes without regard for their role.
+> Each Hoon rune has an unambiguous mapping to a Nock representation.  Furthermore, each rune has a well-defined binary tree structure and produces a similarly well-structured abstract syntax tree (AST).  As we systematically introduce runes, we will expand on what this means in each case:  for now, let's examine a rune and its Nock equivalent.
 >
 > > `|=` bartis produces a _gate_ or function.  Every gate has the same shape, which means certain assumptions about data access and availability can be made.
 > >
@@ -153,20 +237,14 @@ Finally, the most general mold is \texttt{*} which simply matches any noun—and
 > We call Hoon's data type specifications \emph{molds}.  Molds are more general than atoms and cells, but these form particular cases.  Hoon uses molds as a way of matching Nock tree structures (including Hoon metadata tags such as auras).
 {: .callout}
 
-> ##  Aura Conversion Generator
-> TODO
-{: .exercise}
-
 
 ##  Some Data Structures
 
 ### Lists
 
-TODO
+A list is a binary tree which branches rightwards.  The tape, which we saw earlier, is a special case of this applying to single characters.
 
-A list is a binary tree which branches rightwards.
-
-A _lest_ is a special case of list:  one guaranteed to be non-null.  (Certain operations require the stronger guarantee that a list has some content.)
+A `lest` is a special case of list:  one guaranteed to be non-null.  (Certain operations require the stronger guarantee that a list has some content.)
 
 ### Text
 
@@ -183,34 +261,16 @@ For instance, `++trip` converts a cord to a tape; `++crip` does the opposite.
   [^-(@ta (end 3 1 a)) $(a (rsh 3 1 a))]
 ```
 
-`++met`, `++end`, and `++rsh` are bitwise manipulation gates.
+`++met`, `++end`, and `++rsh` are bitwise manipulation gates.  Basically they chop up a cord into $2^3 = 8$-bit slices as the elements of a list.
 
 ```hoon
-++  crip  |=(a=tape `@t`(rap 3 a))}
+++  crip
+  |=  a=tape  ^-  @t
+  (rap 3 a)
 ```
 
-`++rap` assembles the list interpreted as cords with block size of $2^3$ (in this case.
+`++rap` assembles the list interpreted as cords with block size of $2^3 = 8$ (in this case).
 
 All text in Urbit is UTF-8 (and typically just 8-bit ASCII).  The `@c` UTF-32 aura is only used by the keyboard vane `%dill` and Hood (the Dojo terminal agent).
-
-> ## Accessing String Elements
->
-> A list is a binary tree which branches rightwards.  Thus a tape also is a binary tree.
->
-> ![](TODO)
->
-> There are two primary ways to access elements:
->
-> - Direct indexing with `&` or `+`.
-> - The `++snag` gate, `(snag 5 mytape)`.
->
-> TODO
->
-{: .exercise}
-
-> ## Converting Between Cords and Tapes
->
-> `++crip` and `++trip`
-{: .exercise}
 
 {% include links.md %}
