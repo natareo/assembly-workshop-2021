@@ -344,4 +344,28 @@ For instance, `++trip` converts a cord to a tape; `++crip` does the opposite.
 > All text in Urbit is UTF-8 (and typically just 8-bit ASCII).  The `@c` UTF-32 aura is only used by the keyboard vane `%dill` and Hood (the Dojo terminal agent).
 {: .callout}
 
+> ## Sudan Function
+>
+> Implement the [Sudan function](https://en.wikipedia.org/wiki/Sudan_function) in Hoon.
+>
+> $$
+> \begin{array}{lcl}
+> F_0 (x, y) & = x+y \\
+> F_{n+1} (x, 0) & = x & \text{if } n \ge 0 \\
+> F_{n+1} (x, y+1) & = F_n (F_{n+1} (x, y), F_{n+1} (x, y) + y + 1) & \text{if } n\ge 0 \\
+> \end{array}
+> $$
+>
+> > ```hoon
+> > ++  sudan
+> >   |=  [n=@ud x=@ud y=@ud]  ^-  @ud
+> >   ?:  =(n 0)  (add x y)
+> >   ?:  =(y 0)  x
+> >   $(n (dec n), x $(n n, x x, y (dec y)), y (add y $(n n, x x, y (dec y))))
+> > ```
+> {: .solution}
+{: .callout}
+
+
+
 {% include links.md %}
