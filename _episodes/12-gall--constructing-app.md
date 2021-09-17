@@ -76,6 +76,7 @@ keypoints:
 >     --request PUT \
 >     --data '{"ship":"zod","action":"poke","app":"moth","json":"{\"ship\":\"~nec\"}","mark":"noun"}' \
 >     http://localhost:8080/~checkAuth
+>     ```
 {: .exercise}
 
 > ## Secure Messages

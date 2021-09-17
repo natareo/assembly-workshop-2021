@@ -12,7 +12,8 @@ objectives:
 keypoints:
 - "A `%gall` app can talk to a user interface client."
 ---
-FIXME
+
+##  Communications
 
 https://urbit.org/docs/userspace/graph-store/sample-application-overview
 
@@ -42,10 +43,20 @@ Of these, only Arvo directly interacts with four of them:
 ++  on-arvo
 ```
 
+Airlock
+
 **`/app/pupa.hoon`**:
 
 https://urbit.org/docs/userspace/graph-store/sample-application-overview
 
 - [“External API Reference”](https://urbit.org/docs/arvo/eyre/external-api-ref)
+
+##  `graph-store`
+
+Many Gall apps now use `graph-store`, a backend data storage format and database that both provides internally consistent data and external API communications endpoints.
+
+`graph-store` handles data access perms at the hook level, not at the store level.
+
+https://gist.github.com/matildepark/268c758c079d6cf83fd1541b2430ff7f
 
 {% include links.md %}

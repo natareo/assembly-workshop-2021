@@ -171,23 +171,26 @@ For each of the following, we assume the following set has been defined in Dojo:
     ~(tap by greek)
     ```
 
+Many aspects of Hoon, in particular the parser, have their own characteristic data structures, but this should serve to get you started reading and retrieving data from structured sources.
+
 - [Hoon School, “Trees, Sets, and Maps”](https://urbit.org/docs/hoon/hoon-school/trees-sets-and-maps)
 
-A couple of compound structures are also used frequently that have their own terminology:
-
-- `jar` is a map of lists.
-
-    ```hoon
-    ++  jar  |$  [key value]  (map key (list value))
-    ```
-
-- `jug` is a map of sets.
-
-    ```hoon
-    ++  jug  |$  [key value]  (map key (set value))
-    ```
-
-Many aspects of Hoon, in particular the parser, have their own characteristic data structures, but this should serve to get you started reading and retrieving data from structured sources.
+> ##  Jars and Jugs (Optional)
+>
+> A couple of compound structures are also used frequently that have their own terminology:
+>
+> - `jar` is a map of lists.
+>
+>     ```hoon
+>     ++  jar  |$  [key value]  (map key (list value))
+>     ```
+>
+> - `jug` is a map of sets.
+>
+>     ```hoon
+>     ++  jug  |$  [key value]  (map key (set value))
+>     ```
+{: .callout}
 
 
 ##  Standard Library
@@ -197,6 +200,18 @@ The Hoon standard library is split between `sys/hoon.hoon` and `sys/zuse.hoon`. 
 ### Text Parsing and Processing
 
 Most of the text parsing library is built to process Hoon itself, and a variety of rule parsers and analyzers have been built up to this end.  However, we are interested in the much simpler case of loading a structured text string and converting it to some sort of internal Hoon representation.
+
+Frequently, one receives plaintext data from some source (like an HTTP `PUT` request) and needs to convert it to a Hoon-compatible atom format.  Alternatively, one needs to convert from a raw Hoon atom into a text representation.  `++slaw` and `++scot` provide this functionality:
+
+```hoon
+> (slaw %p '~dopzod')
+[~ 4.608]
+> (scot %p 1.000)
+~.~wanlyn
+```
+
+- `++slaw` converts a given `@t` `cord` by a designated aura into a `unit` of that aura.
+- `++scot` converts a given value of any type into a target `@ta` representation of that value as a given aura.  (See also `++scow` to convert to a `tape`.)
 
 > ## Tabular Data (Optional)
 >
@@ -224,22 +239,64 @@ Most of the text parsing library is built to process Hoon itself, and a variety 
 
 #### JSON Structured Data
 
-JSON is a frequently-employed data representation standard that
+JSON is a frequently-employed data representation standard that organizes data into series of lists and key-value pairs (or maps).
 
-Hoon has built-in support for parsing and exporting JSON-styled data.
-
-```hoon
-TODO
+```json
+{
+  "name": "John",
+  "age": 30,
+  "car": null
+}
 ```
 
-Hoon parses JSON in two passes:  first, the JSON is converted in the raw to a tagged data structure using `++de-json:html`.  After this, schema-specific parsers are used to deconstruct the tagged data into usable components with `++dejs:format`.  _This gets a little complicated_, and we'll revisit it tomorrow as well when we need it.
+Hoon has built-in support for parsing and exporting JSON-styled data.  **THIS IS WHERE THINGS GET WEIRD.**  Frequently when working in Hoon, it becomes necessary for you the developer to think in terms of _structures_ rather than _representations_.  JSON is frequently thought of as a generic text representation of data, and while it is acknowledged that there are some different but compatible representations possible (such as by manipulating whitespace), in general JSON _is_ the text.  Not so for Hoon.  It's a very Lisp-y move to consider the data as _more fundamental_ than the instantiation as one particular type of text, and thus there being multiple valid representations of the same data, some quite different from each other.
+
+The foregoing example becomes in Hoon:
+
+```hoon
+[~
+  [%o p={
+      [p='car'
+       q=~
+      ]
+      [p='name'
+       q=[%s p='John']
+      ]
+      [p='age'
+       q=[%n p=~.30]
+      ]
+    }
+  ]
+]
+```
+
+Note the type tags on the information components, and that the `map` is unordered.
+
+Hoon parses JSON in two passes:  first, the JSON is converted in the raw to a tagged data structure using `++de-json:html`.  After this, schema-specific parsers are used to deconstruct the tagged data into usable components with `++dejs:format`.  _This gets a little complicated_, and we'll revisit it again tomorrow when we need it.
 
 The first part is relatively straightforward.  Given a `cord` (`@t`) of JSON data, parse it to a tagged `json` data structure:
 
 ```hoon
+> =a '{"name":"John", "age":30, "car":null}'
+> a
+'{"name":"John", "age":30, "car":null}'
+> (de-json:html a)
+[~ [%o p={[p='car' q=~] [p='name' q=[%s p='John']] [p='age' q=[%n p=~.30]]}]]
 ```
 
 JSON is a structured data type, however, so one cannot generically process it into particular values.  One must know and account for the expected structure.
+
+We have to build a parser to extract expected values (and ignore others).
+
+```hoon
+> =parser %-  ot:dejs-soft:format
+  :~  [%name so:dejs-soft:format]
+      [%age so:dejs-soft:format]
+  ==
+> (parser u:+:(de-json:html a))
+```
+
+TODO fix per the above schema
 
 - [~timluc-miptev, “Call from Outside:  JSON & `chanel.js`”](https://github.com/timlucmiptev/gall-guide/blob/master/chanel.md)
 - [“Fetch JSON”](https://urbit.org/docs/userspace/threads/examples/get-json)
