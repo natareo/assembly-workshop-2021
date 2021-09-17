@@ -16,6 +16,36 @@ FIXME
 
 https://urbit.org/docs/userspace/graph-store/sample-application-overview
 
+We need to examine all of the ways a `%gall` app can communicate with the outside world.  Recall that you have ten arms:
+
+```hoon
+|_  =bowl:gall
+++  on-init
+++  on-save
+++  on-load
+++  on-poke
+++  on-arvo
+++  on-watch
+++  on-leave
+++  on-peek
+++  on-agent
+++  on-fail
+--
+```
+
+Of these, only Arvo directly interacts with four of them:
+
+```hoon
+++  on-init
+++  on-save
+++  on-load
+++  on-arvo
+```
+
+**`/app/pupa.hoon`**:
+
+https://urbit.org/docs/userspace/graph-store/sample-application-overview
+
 - [“External API Reference”](https://urbit.org/docs/arvo/eyre/external-api-ref)
 
 {% include links.md %}

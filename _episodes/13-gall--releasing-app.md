@@ -14,13 +14,16 @@ keypoints:
 
 ##  Installing an App
 
-What makes a regular `%gall` app into a deployed app?  In the past, anyone wanting to use a `%gall` app has needed to access a repo, copy the files down into `app/`, and manually start the app.  With `%docket`, you are able to automate most of this process.
+![A pyramid capstone from Amenemhat III](https://i.imgur.com/KoBYoNI.jpg)
 
+What makes a regular `%gall` app into a deployed app?  In the past, anyone wanting to use a `%gall` app has needed to access a repo, copy the files down into `app/`, and manually start the app.  If something was buggy, you risked lobotomizing your ship, so it was common to set up moons to run installed agents on.  Not total bedlam, but not for the faint of heart.
+
+Grid and `%docket` lead to you being able to automate most of the process now.  Software distribution has become a first-class service in Urbit.
 
 
 ##  Releasing an App
 
-Now that you have seen how to install an app onto your local ship, let's look at how to set up and deploy your own app onto the network.
+You have seen how to install and activate an agent on your local ship.  Let's look at how to set up and deploy your own app onto the network.
 
 The first thing we need to do is create a new desk in `%clay` which will hold all of the relevant information about the app, including files and metadata.
 

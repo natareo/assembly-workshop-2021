@@ -149,4 +149,61 @@ Exercise:
 - Examine `sur/file-server.hoon`
 - Examine `mar/json.hoon`
 
+Every Gall agent is a door with two components in its subject:
+
+1. `bowl:gall` for Gall-standard tools and data structures
+2. App state information
+
+The `bowl` is a collection of information which renders the agent legible to Arvo, such as providing the subscriptions:
+
+```hoon
+++  bowl              ::  standard app state
+  $:  $:  our=ship    ::  host
+          src=ship    ::  guest
+          dap=term    ::  agent
+      ==              ::
+      $:  wex=boat    ::  outgoing subscriptions
+          sup=bitt    ::  incoming subscriptions
+      ==              ::
+      $:  act=@ud     ::  change number
+          eny=@uvJ    ::  entropy
+          now=@da     ::  current time
+          byk=beak    ::  load source
+  ==  ==
+```
+
+For instance, the incoming subscriptions are a map from the `duct` (or `(list path)`) to a particular path on a particular ship.
+
+```hoon
++$  bitt  (map duct (pair ship path))
+```
+
+The `duct` is the main construct for tracking information.  (Think back to our discussion of scrying:  this is the same concept in new clothes.)  The `path` or `wire` (same thing) bears a characteristic structure for each vane.  For instance, a directory listing from `%clay` is a simple path into `/c` with a tag `y` indicating the type of request:
+
+```hoon
+> `path`[%cy /===/sys/vane]
+/cy/~sev/home/~2021.9.17..17.14.19..3635/sys/vane
+> `(list @t)`[%cy /===/sys/vane]
+<|cy ~sev home ~2021.9.17..17.15.48..8a3f sys vane|>
+> `(list @ta)`[%cy /===/sys/vane]
+/cy/~sev/home/~2021.9.17..17.15.58..ccd9/sys/vane
+> `(list @tas)`[%cy /===/sys/vane]
+~[%cy %~sev %home %~2021.9.17..17.16.01..a51e %sys %vane]
+```
+
+(This `path` can be directly executed with `.^` dotket as follows:  `.^(arch %cy /===/sys/vane)`.)
+
+A `%gall` `path` could look like this:
+
+```hoon
+> `path`[%gx /=settings-store=/has-entry/urbit-agent-permissions/'http://localhost:3000'/noun]
+```
+
+So this is _called_ a `path` but it's really a complete package of request type, agent information, and data with metadata.
+
+> ##  Agents and Apps
+>
+> The terminology for userspace has not yet completely solified.  I strive to use “agent” to refer to a particular running instance, like a “container” in Docker, whereas an “app” is more like a Docker “image”, the archetypal instance.  However, I will frequently and inadvertently use “agent” in synecdoche to refer to apps.
+{: .callout}
+
 {% include links.md %}

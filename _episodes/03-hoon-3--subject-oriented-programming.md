@@ -20,22 +20,24 @@ keypoints:
 Urbit adopts an innovative programming paradigm called “subject-oriented programming.”  By and large, Hoon (and Nock) is a functional programming language in that
 However, Hoon also very carefully bounds the known context of any part of the program as the _subject_.  Basically, the subject is the noun against which any arbitrary Hoon code is evaluated.
 
-For instance, when we first composed generators, we made what are called “naked generators”:  that is, they do not have access to any information outside of the base subject (Arvo, Hoon, and `%zuse`).  Other generators (such as `%say` generators, described below) can have other contextual information, including random number generators and optional arguments, passed to them in their subject.
+For instance, when we first composed generators, we made what are called “naked generators”:  that is, they do not have access to any information outside of the base subject (Arvo, Hoon, and `%zuse`) and their sample (arguments).  Other generators (such as `%say` generators, described below) can have more contextual information, including random number generators and optional arguments, passed to them to form part of their subject.
 
 Hoon developers frequently talk about “limbs” of the subject.  Arms describe known labeled address (with `++` luslus) which carry out computations.  Legs are limbs which store data.
 
 ![](TODO:serge-nubret)
 
-Labelled arms are invoked as e.g. gates on data.  However, if you know the address of a particular value, you can retrieve it directly using either notation:
+> ## Addressing Redux
+>
+> Labelled arms are invoked as e.g. gates on data.  However, if you know the address of a particular value in a limb, you can retrieve it directly using either notation:
+>
+> - Numbered limb, `+`/`:` lets you grab a specific numbered arm:  `+7:[1 2 3]`
+> - Lark notation, `+`/`-`/`<`/`>` lets you select by relative address:  `+>:[1 2 3]`
+>
+> (One challenge of navigation in the current Dojo is that Urbit developer tools return details like hashes of arms rather than supervening labels.)
+{: .callout}
 
-- Numbered limb, `+`/`:` lets you grab a specific numbered arm:  `+7:[1 2 3]`
-- Lark notation, which we will skip here but is described in the docs.
 
-Lists have an additional way to grab an element:
-
-- Sequential entry, `&` lets you grab the _n_th item of a list:  `&1:~['one' 2 .3.0 .~4.0 ~.5]`
-
-TODO exercise about this
+<!-- TODO exercise about this -->
 
 - [“The Subject and its Legs”](https://urbit.org/docs/hoon/hoon-school/the-subject-and-its-legs)
 
@@ -46,19 +48,59 @@ TODO exercise about this
 
 The core is the primary nontrivial data structure of Nock:  atoms, cells, cores.  A core is defined as a cell of `[battery payload]`; in the abstract this simply divides the `battery` or code from the `payload` or data.  Cores can be thought of as similar to objects in object-oriented programming languages, but possess a completely standard structure which allows for detailed introspection and “hot-swapping” of core elements.  Everything in standard Hoon and Arvo that cannot be reduced to an atom or a cell is _de facto_ a core.  (Indeed, if one wished to separate code and data in a binary tree structure, the only other logical choice one would have available is to flip the order of `battery` and `payload`.)
 
+In short a `battery` is a collection of arms and a payload is a collection of data, possibly from various sources.  (At this point the “leg” terminology breaks down a bit, and in practice mostly people talk about “arms.”)
+
 Conventionally, most cores are either produced by the `|%` barcen rune or are instances of a more complex form (such as a door).  Cores are a “live” type; they are not simply holders of data but are expected to operate on data, just as it is uncommon to see a C++ object which only holds data.  (The role of a C `struct` is approximated by the `$%` buccen tagged union.)
 
-Some terminology is in order, to be expanded on subsequently.  An _arm_ is a Hoon expression to be evaluated against the
-TODO
+Some terminology is in order, to be expanded on subsequently:
 
-arms
-legs
-Arms and legs are both \emph{limbs}.  (These must be distinguished from \emph{wings}, which are resolution paths pointing to a limb.)
+- An [_arm_](https://urbit.org/docs/glossary/arm) is a Hoon expression to be evaluated against the core subject (i.e. its parent core is its subject).
+- A [_leg_](https://urbit.org/docs/hoon/hoon-school/the-subject-and-its-legs) is a
+- A [_limb_](https://urbit.org/docs/hoon/reference/limbs/limb) is either an arm or a leg:  formally, “an attribute of a subject.”  A limb is resolved with
+- A [_wing_](https://urbit.org/docs/hoon/reference/limbs/wing) is a resolution path pointing to a limb.  It's a search path, like ``
 
+Altogether, this yields a rich introspective framework for accessing and manipulating cores.  We won't do a lot with it, but if you are interested, look up core genericity and variadicity in the docs.
+
+> ## Shadowing Names (Optional)
+>
+> In any programming paradigm, good names are valuable and collisions are likely.  In Hoon, if you need to catch an outer-context label that has the same name as an inner-context value, use `^` ket to skip the depth-first match.
+>
+> ```hoon
+> ^^json
+> ```
+{: .callout}
+
+> ## Limb Resolution Paths
+>
+> While [the docs on limbs](https://urbit.org/docs/hoon/reference/limbs/limb) contain a wealth of information on how limbs are resolved by the Hoon compiler, it is worth addressing in brief the two common resolution tools you will encounter today:  `.` dot and `:` col.
+>
+> - `.` dot resolves the wing path into the current subject.
+> - `:` col resolves the wing path with the right-hand-side as the subject.
+{: .callout}
+
+> ## Operators (Optional)
+>
+> There's a lot going on with addressing.  In practice, it's typically readable but subtleties abound.
+>
+> - `+` lus is the _slot operator_.
+> - `&` pam is the _head_ of a cell.
+> - `|` bar is the _tail_ of a cell.
+> - `.` dot is the wing resolution path into the subject (using Nock Zero).
+>
+>   `=/(foo [a=3 b=4] b.foo)` is `4`, because one adds `foo=[a=3 b=4]` to the subject.
+>
+> - `:` col is the right-associative search path into the right-hand side _as_ subject (using Nock Seven).  (This is also the irregular syntax of [`+<` tisgal](https://urbit.org/docs/hoon/reference/rune/tis#-tisgal).)
+>
+>    `=/(foo [a=3 b=4] b:foo)` is `4`, because one computes the wing `foo` against the subject beneath the `=/` and then using that as the subject for the computing the wing `b`.
+>
+> - `+` lus/`-` hep/`<` gal/`>` gar are the lark notation symbols.
+{: .callout}
+
+- [“Arms and Cores”](https://urbit.org/docs/hoon/hoon-school/arms-and-cores)
 
 ### Traps
 
-The trap creates the basic looping mechanism in Hoon, a special instance of a core which is capable of concisely recursing into itself.  The trap is formally a core with one arm named `$` buc, and it is either created with `|-` barhep(for instant evaluation) or `|.` bardot (for deferred evaluation).
+The [trap](https://urbit.org/docs/glossary/trap) creates the basic looping mechanism in Hoon, a special instance of a core which is capable of concisely recursing into itself.  The trap is formally a core with one arm named `$` buc, and it is either created with `|-` barhep (for instant evaluation) or `|.` bardot (for deferred evaluation).
 
 In practice, traps are used almost exclusively as recursion points, much like loops in an imperative language.  For instance, the following program counts from 5 down to 1, emitting output via `~&` sigpam at each iteration, then return `~` sig.
 
@@ -72,76 +114,87 @@ $(count (dec count))
 
 The final line `$(count (dec count))` serves to modify the subject (at `count`) then to pull the `$` buc arm again.  In practice the tree unrolls as follows, with indentation indicating code running “inside” of another rune.
 
-```hoon
-=/  count  5
-|-
-  ?:  =(count 0)  ~
-  ~&  count
-  =/  count  (dec count)
-  ?:  =(count 0)
-  TODO think about how to unroll this in a visually pleasing manner that isn't
-  a total lie
-$(count (dec count))
-```
-
-recursive TODO
-
 
 ### Gates
 
 Similar to how a trap is a core with one arm, a gate is a core with one arm and a sample.  This means that new per-invocation data are available in the gate's subject.
 
+A gate is a core `[battery payload]` with one arm `$` buc in the battery and a `payload` consisting of `[sample context]`; thus, `[$ [sample context]]`.  We've encountered gates in generators before (which Dojo knows how to connect), but very frequently they are implemented as arms in a larger core.
 
-A gate can recurse into itself like a trap when necessary.  In this example, the gate accepts a value \texttt{n} (the gate's \texttt{spec}) and applies an arm (implicitly named \buc) which carries out the calculation.  (Say it with me:  \texttt{sample}/\texttt{payload}.)  When the \texttt{\$()} recursion point is reached, the entire \buc~arm is re-evaluated with the specified change of $\texttt{n} \rightarrow \texttt{n} - 1$.
+When you invoke a gate using `%-` cenhep (what is the irregular form?), the `$` buc arm is pulled and the `sample` is passed in to it.
 
-\begin{lstlisting}[language=hoon,
-                   caption={Calculating a factorial using recursion.  (Example from Tlon documentation.)}]
-|=  n=@ud             :: accept a single value n for n!
-?:  =(n 1)  1         :: check n ≟ 1; if so, return 1
-(mul n $(n (dec n)))  :: multiply n times the product of this arm w/ n-1
-\end{lstlisting}
+Gates—and other cores—have a standard structure, which renders them valid objects of introspection.  Indeed, Lisp-style brain surgery on cores is not uncommon, although we will by and large not need it in this workshop.
+
+```hoon
+$:add
+$:mul
+$:arch
+```
+
+A trap isn't the only way to recurse in Hoon.  In fact, one sees the default `$` buc arm invoked directly in many cases to recalculate an entire gate recursively.  Consider, for instance, this implementation of the factorial:
+
+```hoon
+|=  n=@ud
+?:  =(n 1)
+  1
+(mul n $(n (dec n)))
+```
+
+In this case, the `$` buc arm is directly invoked in the `++mul` itself.  When the `$()` recursion point is reached, the entire `$` buc arm is re-evaluated with the specified change of `n` → `n-1`.
 
 That is, when one reads this program, one reads it falling into two components:
 
-\begin{lstlisting}[language=hoon,
-                   style=nonumbers]
+```hoon
 |=  n=@ud             :: accept a single value n for n!
 ?:  =(n 1)  1         :: check n ≟ 1; if so, return 1
 (mul n $(n (dec n)))  :: multiply n times the product of this arm w/ n-1
-\end{lstlisting}
+```
 
-
+- [“Gates”](https://urbit.org/docs/hoon/hoon-school/gates)
 
 ### Doors
 
-`|_` barcab
+A gate is a particular instance of a core which is “automatically executable.”  A door is a more general instance of a gate:  really, it's a gatemaker.  It produces gates as necessary.
 
-The \pbarcen~rune produces a dry core, thus all arms it contains are dry.
+When using a gate, the calling convention replaces the `sample` then pulls the `$` buc arm.  In contrast, when using a door, the calling convention replaces the `sample` then pulls which arm has been requested.
 
-The \pbarpat~rune produces a wet core, so it can contain wet arms.
-
-Doors are superficially similar to gates, but calling an arm in a door is more general:  the calling convention for a gate replaces the sample then pulls the \buc~arm, while the calling convention for a door replaces the sample then pulls whichever arm has been requested.
-
-\marginnote[2mm]{
-Doors and other cores frequently include custom type definitions; these are discussed below in Section~\ref{he:mold}.
-}
-Since \dot~refers to the subject TODO:expand, this yields the ability to manipulate the sample without calling any arm directly.  The following examples illustrate:
+For instance, the random number generator uses the system entropy `eny` to produce a random number in the range 1–100:
 
 ```hoon
-> (add [1 5]})              :: call a gate
-6
-> ~($ add [1 5])            :: call the $ arm in the door
-6
-> ~(. add [1 5])            :: update the sample (arguments) but don't evaluate
-<1.otf [[@ud @ud] <45.xig 1.pnw %140>]>
-> =<  $  ~(. add [1 5])     :: call the $ arm of the door with updated sample
-6
-> =/  addd  ~(. add [1 5])  :: do the same thing but in two steps
-  =<  $  addd
-6
+(~(rad og eny) 1.000)
 ```
 
-> ## Code as Specification
+To build a door, use the `|_` barcab rune to produce a core with multiple arms (and no default `$` buc arm).  A running program agent is a door, so we will work more with these incidentally tomorrow.
+
+```hoon
+|_  TODO
+```
+
+> ## Custom Types
+>
+> Doors and other cores frequently include custom type definitions; these are discussed below in “Molds”.
+{: .callout}
+
+> ## Manipulating the Sample Directly (Optional)
+>
+> Since `.` dot refers to the subject, this yields the ability to manipulate the sample without calling any arm directly.  The following examples illustrate:
+>
+> ```hoon
+> (add [1 5])               :: call a gate
+> 6
+> ~($ add [1 5])            :: call the $ arm in the door
+> 6
+> ~(. add [1 5])            :: update the sample (arguments) but don't evaluate
+> <1.otf [[@ud @ud] <45.xig 1.pnw %140>]>
+> =<  $  ~(. add [1 5])     :: call the $ arm of the door with updated sample
+> 6
+> =/  addd  ~(. add [1 5])  :: do the same thing but in two steps
+>   =<  $  addd
+> 6
+> ```
+{: .callout}
+
+> ## Code as Specification (Optional)
 >
 > At this point, we need to step back and contextualize the power afforded by the use of cores.  In another language, such as C or Python, we specify a behavior but have relatively little insight into the instantiation effected by the compiler.
 >
@@ -253,7 +306,7 @@ The aura is a particular example of a _mold_, the type enforcement mechanism in 
 - `$%` buccen creates a collection of named values (type members).
 - `$=` bucwut defines a union, a set validating membership across a defined collection of items.  (This is similar to a `typedef` or `enum` in C-related languages.)
 
-To illustrate these, we consider several ways to define a vehicle.  In the first, we employ only `+$` to capture key vehicle characteristics.  Using only lusbuc, it's hard to say much of interest:
+To illustrate these, we consider several ways to define a vehicle.  In the first, we employ only `+$` lusbuc to capture key vehicle characteristics.  Using only lusbuc, it's hard to say much of interest:
 
 ```hoon
 +$  vehicle  tape               :: vehicle identification number
@@ -287,7 +340,7 @@ Type definition arms can rely on other type definition arms available in the sub
 
 > ## Masking Variables
 >
-> In general, Hoon style does not require you to be careful about masking variable names in the subject (using the same name for the value as the mold).  This rarely introduces surprising bugs but is typically contextually apparent to the developer.
+> In general, Hoon style does not require you to be careful about masking variable names in the subject (using the same name for the value as the mold).  This rarely introduces surprising bugs but is typically contextually apparent to the developer.  Check the note on “Shadowing Variables” above for more details.
 {: .callout}
 
 Finally, by introducing unions with `$?` bucwut, a type definition arm can validate possible values:
@@ -308,16 +361,16 @@ Finally, by introducing unions with `$?` bucwut, a type definition arm can valid
   ?(%acura %chrysler %delorean %dodge %jeep %tesla %toyota)
 ```
 
-`@tas`-tagged text elements are extremely common in such type unions, as they afford a human-legible categorization that is nonetheless rigorous to the machine.
+`@tas`-tagged text elements are extremely common in such type unions, as they afford a human-legible categorization that is nonetheless rigorous to the machine.  (This is a like a `typedef` and constant combined, in that it has only the types in the union.)
 
 
 ##  Generators
 
 Generators are standalone Hoon expressions that evaluate and may produce side effects, as appropriate.  They are closely analogous to simple scripts in languages such as Bash or Python.  By using generators, one is able to develop more involved Hoon code and run it repeatedly without awkwardness.  Put another way, a generator is a nonpersistent computation:  it maps an input to an output.
 
-(You will also see commands beginning with a `|` symbol; these are `%hood` commands instead, the CLI app.)
+(You will also see commands beginning with a `|` symbol; these are `%hood` commands instead, the CLI agent for Dojo.)
 
-To run a generator on a ship, prefix its name with \texttt{+}.  Arguments may be required or optional.
+To run a generator on a ship, prefix its name with `+` lus.  Arguments may be required or optional.
 
 ```hoon
 +trouble
@@ -329,20 +382,17 @@ To run a generator on a ship, prefix its name with \texttt{+}.  Arguments may be
 +moon ~rinset-lapter-sampel-palnet
 ```
 
-
 ### Naked Generators
 
-As we start to compose generators,
+The simplest generator is a simple map of input to output without even a broader subject.  We've used these already, as with `+fib`.
 
 A naked generator is so called because it contains no metadata for the Arvo interpreter.  Its subject is simply the standard Arvo/`%zuse`/Hoon stack, and its sample is a simple single noun.  (Since a noun can be a cell, you can sneak in more than one argument.)  Naked generators are nonpersistent computations, thus naked generators are typically straightforward calculators or system queries.
-
-TODO
 
 ### `%say` Generators
 
 More interesting for most cases are `%say` generators, which can include more information in their sample.  (Dojo knows how to handle these as standard cases because they are tagged with `%say` in the return cell.)
 
-do know about Arvo and are able to leverage information from and about the operating system in performing their calculations.
+`%say` generators do know about Arvo and the subject and are able to leverage information from and about the operating system in performing their calculations.
 
 A basic `%say` generator looks like this:
 
@@ -353,9 +403,9 @@ A basic `%say` generator looks like this:
 (sub 1.000 1)
 ```
 
-- `:-` composes a cell
-- `%` in front of text indicates a `@tas`-style constant
-- `*` is a mold matching any data type, atom or cell
+- `:-` composes a cell.
+- `%` in front of text indicates a `@tas`-style constant.  Here, this is a type annotation for the handler evaluating the generator.
+- `*` is a mold matching any data type, atom or cell.  Since the sample is unused, there's no point in restricting it.
 
 This generator can accept any input (`*`) or none at all.  It returns, in any case, `999`.
 
@@ -363,20 +413,19 @@ To match a particular mold, you can specify from this table, with atoms expandin
 
 | Shorthand | Mold |
 | --------- | ---- |
-| `*` | noun |
-| `@` | atom |
-| `^` | cell |
-| `?` | loobean |
-| `~` | null |
-
+|    `*`    | noun |
+|    `@`    | atom |
+|    `^`    | cell |
+|    `?`    | loobean |
+|    `~`    | null |
 
 The generator itself consists of a cell `[%say hoon]`, where `hoon` is the rest of the code.  The `%say` metadata tag indicates to Arvo what the expected structure of the generator is _qua_ `%say` generator.
 
-In general, a `%say` generator doesn't need a sample (input arguments) to complete:  Arvo can elide that if necessary[.](https://www.youtube.com/watch?v=iYdk1BsAI2M)  <!-- egg -->
+In general, a `%say` generator doesn't need a sample (input arguments) to complete:  Arvo can elide that if necessary.
 
-More generally, a `%say` generator
+More generally, a `%say` generator TODO
 
-The `sample` should be a 3-tuple:  `[[now eny beak] ~[unnamed arguments] ~[named arguments]]`.
+The maximalist `sample` is a 3-tuple:  `[[now eny beak] ~[unnamed arguments] ~[named arguments]]`.
 
 > `now` is the current time.  `eny` is 512 bits of entropy for seeding random number generators.  `beak` contains the current ship, desk, and case.
 
@@ -451,6 +500,8 @@ To use it:
 Since the default value is `~`, if you are testing for the presence of named arguments you should test against that value.
 
 Note that, in all of these cases, you are writing a gate `|=` bartis which accepts `[* * ~]` or the like as sample.  Dojo (and Arvo generally) recognizes that `%say` generators have a special format and parse the command-line form into appropriate form for the gate itself.
+
+TODO commas
 
 - Reading: [Tlon Corporation, "Generators"](https://urbit.org/docs/tutorials/hoon/generators/), sections "%say Generators", "%say generators with arguments", "Arguments without a cell"
 

@@ -119,7 +119,7 @@ All structures in Nock are binary trees; thus also Hoon.  This can occasionally 
 
 ![](./img/binary-tree.png)
 
-For instance, a list of characters (or `tape`, one of Hoon's string types) can be addressed directly by the rightward-branching cell addresses or via a convenience notation (which is more intuitive).
+For instance, a list of characters (or `tape`, one of Hoon's string types) can be addressed directly by the rightward-branching cell addresses or via a convenience notation (which is more intuitive).  (We'll see more of this in a moment when we discuss text data structures.)
 
 ![](./img/binary-tree-tape.png)
 
@@ -250,6 +250,74 @@ A `lest` is a special case of list:  one guaranteed to be non-null.  (Certain op
 
 Hoon recognizes two basic text types:  the _cord_ or `@t` and the `tape`.  Cords are single atoms containing the text as UTF-8 bytes interpreted as a single stacked number.  Tapes are lists of individual one-element cords.  (Lists are null-terminated, and thus so are tapes.)
 
+For instance, a list of characters (or `tape`, one of Hoon's string types) can be addressed directly by the rightward-branching cell addresses or via a convenience notation (which is more intuitive).
+
+![](./img/binary-tree-tape.png)
+
+```hoon
+> +1:"hello"
+i="hello"
+> +2:"hello"
+i='h'
+> +3:"hello"
+t="ello"
+> +4:"hello"
+dojo: hoon expression failed
+> +5:"hello"
+dojo: hoon expression failed
+> +6:"hello"
+i='e'
+> +7:"hello"
+t="llo"
+> +15:"hello"
+t="l"
+> +16:"hello"
+t="lo"
+> +30:"hello"
+t="l"
+> +31:"hello"
+t="o"
+> +62:"hello"
+i='o'
+> +63:"hello"
+t=""
+> +127:"hello"
+dojo: hoon expression failed
+```
+
+Lists have an additional way to grab an element:
+
+- Sequential entry, `&` lets you grab the _n_th item of a list:  `&1:~['one' 2 .3.0 .~4.0 ~.5]`
+
+```hoon
+> &1:"hello"
+i='h'
+> &2:"hello"
+i='e'
+> &3:"hello"
+i='l'
+> &4:"hello"
+i='l'
+> &5:"hello"
+i='o'
+```
+
+In contrast to tapes, cords store the ASCII values in a single arbitrary integer in LSB order.
+
+![](./img/atom-cord.png)
+
+(More properly, it's done in UTF-8:  here's Cherokee.)
+
+```hoon
+> 'ᏣᎳᎩ'
+'ᏣᎳᎩ'
+> `@ux`'ᏣᎳᎩ'
+0xa9.8ee1.b38e.e1a3.8fe1
+> `@ub`'ᏣᎳᎩ'
+0b1010.1001.1000.1110.1110.0001.1011.0011.1000.1110.1110.0001.1010.0011.1000.1111.1110.0001
+> :: 0xa9.8ee1  0xb3.8ee1  0xa3.8fe1
+```
+
 Cords are useful as a compact primary storage and data transfer format, but frequently parsing and processing involves converting the text into tape format.  There are more utilities for handling tapes, as they are already broken up in a legible manner.
 
 For instance, `++trip` converts a cord to a tape; `++crip` does the opposite.
@@ -271,6 +339,9 @@ For instance, `++trip` converts a cord to a tape; `++crip` does the opposite.
 
 `++rap` assembles the list interpreted as cords with block size of $2^3 = 8$ (in this case).
 
-All text in Urbit is UTF-8 (and typically just 8-bit ASCII).  The `@c` UTF-32 aura is only used by the keyboard vane `%dill` and Hood (the Dojo terminal agent).
+> ## Unicode in Urbit
+>
+> All text in Urbit is UTF-8 (and typically just 8-bit ASCII).  The `@c` UTF-32 aura is only used by the keyboard vane `%dill` and Hood (the Dojo terminal agent).
+{: .callout}
 
 {% include links.md %}
