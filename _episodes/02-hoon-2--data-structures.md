@@ -167,7 +167,33 @@ i='l'
 i='o'
 ```
 
-More commonly than direct numerical addressing (of either form), however, is _lark addressing_, which is quirky.  The head and tail of each cell are selected by alternating `+`/`-` and `<`/`>` pairs, which is readable once you know what you're looking at.
+> ## Cell Construction
+>
+> Produce a cell representation of the fruit tree.  You may use the following Unicode strings as `@t` `cord`s:
+>
+> ![](img/binary-tree-fruit.png)
+>
+> - '🍇'
+> - '🍌'
+> - '🍉'
+> - '🍏'
+> - '🍋'
+> - '🍑'
+> - '🍊'
+> - '🍍'
+> - '🍒'
+>
+> Use `~` as a placeholder for an empty node when necessary.
+>
+> > ### Solution
+> >
+> > ```py
+> > [[[['🍏' ~] '🍇'] [[~ ['🍑' [~ '🍍']]] '🍌']] [['🍉' [~ '🍋']] [~ [~ ['🍊' ['🍒' ~]]]]]]
+> > ```
+> {: .solution}
+{: .exercise}
+
+More common than direct numerical addressing (of either form), however, is _lark addressing_, which is a quirky but legible shorthand.  The head and tail of each cell are selected by alternating `+`/`-` and `<`/`>` pairs, which is readable once you know what you're looking at.
 
 ```hoon
 > =hello "hello"

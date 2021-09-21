@@ -33,9 +33,9 @@ In order to orient yourself around the kinds of things the Urbit OS does, it is 
 
 ### `%ames`, A Network
 
-In a sense, `%ames` is the operative definition of an urbit on the network.  That is, from outside of one's own urbit, the only specification that must be hewed to is that `%ames` behaves a certain way in response to events. TODO
+In a sense, `%ames` is the operative definition of an Urbit ship on the network.  That is, from outside of one's own urbit, the only specification that must be hewed to is that `%ames` behaves a certain way in response to events.  (Of course, without a fully operational ship behind the `%ames` receiver not much would happen.)
 
-`%ames` implements a system expecting—and delivering—guaranteed one-time delivery.  This derives from an observation by \citeauthor{Yarvin2016}~in the Whitepaper:
+`%ames` implements a system expecting—and delivering—guaranteed one-time delivery.  This derives from an observation in the Whitepaper:
 
 > There is a categorical difference between a bus, which transports commands, and a network, which transports packets. You can drop a packet but not a command; a packet is a fact and a command is an order. To send commands over a wire is unforgivable: you’ve turned your network into a bus. Buses are great, but networks are magic.
 >
@@ -55,9 +55,11 @@ As the shortest vane, we commend `%behn` to the student as an excellent subject 
 
 ### `%clay`, A File System
 
-`%clay` is one of the most significant vanes in Arvo.  `%clay` is a global-namespace typed version-control filesystem, meaning that it TODO
+`%clay` is one of the most significant vanes in Arvo.  `%clay` is a global-namespace typed version-control filesystem, meaning that it can 1) refer to any value on any ship (although it may not be able to _access_ said value); 2) has a type for each noun it holds; and 3) retains a full history of the file system.
 
-https://github.com/davis68/martian-computing/blob/78dce6435f645f2135f09e228062a1371cf2ef9d/lessons/lesson22-clay-2.md
+
+
+For instance, to read a local file, use `++warp`:  TODO
 
 ```
 ~tinnus-napbus
@@ -125,42 +127,96 @@ marks
 % https://github.com/urbit/urbit/blob/master/pkg/arvo/sys/vane/gall.hoon#L1538
 % https://urbit.org/blog/ford-fusion/
 
-
 ### `++ford` , A Build System
 
-`++ford` builds code (either from the Dojo, from a library, from an app, etc.). `++ford` used to be a standalone vane but was integrated into `%clay` [a year or so ago](https://urbit.org/blog/ford-fusion/).
+`++ford` builds code (either from the Dojo, from a library, from an app, etc.). `++ford` used to be a standalone vane [but was integrated into `%clay` in 2020](https://urbit.org/blog/ford-fusion/).
 
 `++ford` provides a number of runes for building and importing code into a subject:
 
-- `/-`:  Import structure file from `sur`.
-- `/+`:  Import library file from `lib`.
-- `/=`:  Import user-specified file.
-- `/*`:  Import contents of file converted by mark.
+- `/-`:  Import a structure file from `sur`.
+- `/+`:  Import a library file from `lib`.
+- `/=`:  Import a user-specified file.
+- `/*`:  Import the contents of a file converted by given mark.
 
-TODO importing with \texttt{*} is w/o face, foo=bar
+Importing with `*` removes the face (i.e. imports directly into the namespace), while `foo=bar` renames the face.
+
 
 ### Marks and conversions
 
-TODO
+A mark is a rule for a data structure.  It's sort of like a file extension for `%clay`.  `%clay` also maintains rules for mapping that data structure (such as `%json`) to another (like `%txt`).  Any `%clay` path includes the mark to use on that file—it's not really a file extension, per se, it's an interpretive rule!  Marks live in `mar/` and have a standard core structure.
 
-\subsection{Exercises}
-\labsec{kr:c:exercises}
+For instance, the mark for `%json` lives at `mar/json.hoon` and reads as:
 
-CSV Conversion Mark
-Compose a mark capable of conversion from a CSV file to a plain-text file (and vice versa).
+```hoon
+::
+::::  /hoon/json/mar
+  ::
+/?    310
+  ::
+::::  compute
+  ::
+=,  eyre
+=,  format
+=,  html
+|_  jon=json
+::
+++  grow                                                ::  convert to
+  |%
+  ++  mime  [/application/json (as-octs:mimes -:txt)]   ::  convert to %mime
+  ++  txt   [(crip (en-json jon))]~
+  --
+++  grab
+  |%                                                    ::  convert from
+  ++  mime  |=([p=mite q=octs] (fall (rush (@t q.q) apex:de-json) *json))
+  ++  noun  json                                        ::  clam from %noun
+  ++  numb  numb:enjs
+  ++  time  time:enjs
+  --
+++  grad  %mime
+--
+```
 
-The ++grad arm can be copied from the hoon mark, since we are not concerned with preserving CSV integrity.
+Marks are used to:
 
-Conversion Tube
-Use ++ford to produce a tube from hoon to txt.
+1. Convert between marks (`tube`s).
+2. Diff, patch, and merge for `%clay`'s revision control operations.
+3. Validate untyped nouns.
 
-Answer this question with the expression.
+Each mark has three arms:
 
+1. `++grow` converts to the mark (first attempt to convert).
+2. `++grab` converts from the mark (second attempt to convert).
+3. `++grad` is used to `++diff`, `++pact`, `++join`, and `++mash` the noun.
+
+`%gall` uses marks to validate and manipulate the data values being carried by pokes and scries.
+
+- [“Ford Fusion”](https://urbit.org/blog/ford-fusion)
+
+> ### Build a Mark (Optional)
+>
+> [A `csv` file](https://datatracker.ietf.org/doc/html/rfc4180) (comma-seperated value or common seperator of values) contains tabular information with entry fields across lines and records spanning down.
+>
+> ```csv
+> Duration,Pulse,Maxpulse,Calories
+> 60,110,130,409.1
+> 60,117,145,479.0
+> 60,103,135,340.0
+> 45,109,175,282.4
+> 45,117,148,406.0
+> 60,102,127,300.0
+> 60,110,136,374.0
+> 45,104,134,253.3
+> 30,109,133,195.1
+> ```
+>
+> Compose a mark capable of conversion from a CSV file to a plain-text file (and vice versa).
+>
+> The `++grad` arm can be copied from the hoon mark, since we are not concerned with preserving CSV integrity.
+{: .exercise}
 
 ### `%dill` , A Terminal Driver
 
 `%dill` handles keypress events generated from the keyboard or telnet.  This includes the state of the terminal window (size, shape, etc.) and keystroke-by-keystroke events.  `%dill` scrys are unusual, in that they are typically only necessary for fine-grained Arvo control of the display.  Even command-line apps instrumented with `%shoe` do not call into `%dill` commonly.  The only instance of use in the current Arvo kernel is in Herm, the terminal session manager.
-
 
 ### `%eyre` and `%iris`, Server and Client Vanes
 
@@ -171,7 +227,6 @@ Answer this question with the expression.
 - [“`%eyre` Tutorial”](https://urbit.org/docs/arvo/eyre/eyre)
 - [“`%iris` Tutorial”](https://urbit.org/docs/arvo/iris/iris)
 - [“External API Reference”](https://urbit.org/docs/arvo/eyre/external-api-ref)
-
 
 ### `%jael` , Secretkeeper
 

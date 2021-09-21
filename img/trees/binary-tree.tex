@@ -1,0 +1,125 @@
+\documentclass{article}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{lscape}
+\usepackage{emoji}
+\setemojifont{Apple Color Emoji}
+\pgfplotsset{compat=1.10}
+\usetikzlibrary{shapes.geometric,arrows,fit,matrix,positioning}
+\tikzset {
+  treenode/.style = {circle, draw=black, align=center, minimum size=1cm},
+}
+\begin{document}
+\emoji{grapes}
+\emoji{watermelon}
+\emoji{peach}
+\emoji{banana}
+\emoji{green-apple}
+\emoji{lemon}
+\emoji{blueberries}
+\emoji{cherries}
+
+\begin{landscape}
+\begin{figure}[t]
+  \centering
+  {
+      \begin{tikzpicture}[->, >=stealth',
+                          level/.style={sibling distance = 12cm/#1,
+                          level distance = 2.5cm}, scale=0.6, transform shape]
+      \node [treenode] {}
+        child {
+          node [treenode] {}
+            child {
+              node [treenode] {}
+              child {
+                node [treenode] {}
+                child {
+                  node [treenode] {}
+                }
+                child {
+                  node [treenode] {}
+                }
+              }
+              child {
+                node [treenode] {}
+              }
+            }
+            child {
+              node [treenode] {\emoji{grapes}}
+              child {
+                node [treenode] {}
+                child {
+                  node [treenode] {}
+                }
+                child {
+                  node [treenode] {}
+                  child {
+                    node [treenode] {}
+                  }
+                  child {
+                    node [treenode] {}
+                    child {
+                      node [treenode] {}
+                    }
+                    child {
+                      node [treenode] {}
+                    }
+                  }
+                }
+              }
+              child {
+                node [treenode] {}
+              }
+            }
+        }
+        child {
+          node [treenode] {}
+          child {
+            node [treenode] {}
+            child {
+              node [treenode] {}
+            }
+            child {
+              node [treenode] {}
+              child {
+                node [treenode] {}
+              }
+              child {
+                node [treenode] {}
+              }
+            }
+          }
+          child {
+            node [treenode] {}
+            child {
+              node [treenode] {}
+            }
+            child {
+              node [treenode] {}
+              child {
+                node [treenode] {}
+              }
+              child {
+                node [treenode] {}
+                child {
+                  node [treenode] {}
+                }
+                child {
+                  node [treenode] {}
+                  child {
+                    node [treenode] {}
+                  }
+                  child {
+                    node [treenode] {}
+                  }
+                }
+              }
+            }
+          }
+        }
+    ;
+    \end{tikzpicture}
+  }
+\end{figure}
+\end{landscape}
+\end{document}

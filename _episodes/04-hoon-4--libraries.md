@@ -28,6 +28,7 @@ Many operations are first-class features of the Hoon subject.  For instance,
 
 json etc.
 
+TODO
 
 ##  
 

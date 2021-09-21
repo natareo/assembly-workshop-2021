@@ -24,7 +24,7 @@ For instance, when we first composed generators, we made what are called “nake
 
 Hoon developers frequently talk about “limbs” of the subject.  Arms describe known labeled address (with `++` luslus) which carry out computations.  Legs are limbs which store data.
 
-![](TODO:serge-nubret)
+![](https://davis68.github.io/martian-computing/img/08-nubret.png)
 
 > ## Addressing Redux
 >
@@ -36,8 +36,35 @@ Hoon developers frequently talk about “limbs” of the subject.  Arms describe
 > (One challenge of navigation in the current Dojo is that Urbit developer tools return details like hashes of arms rather than supervening labels.)
 {: .callout}
 
-
-<!-- TODO exercise about this -->
+> ## Addressing the Fruit Tree
+>
+> Produce the numeric and lark-notated equivalent addresses for each of the following nodes in the binary fruit tree:
+>
+> ![](img/binary-tree-fruit.png)
+>
+> - 🍇
+> - 🍌
+> - 🍉
+> - 🍏
+> - 🍋
+> - 🍑
+> - 🍊
+> - 🍍
+> - 🍒
+>
+> > ### Solution
+> >
+> > - 🍇 `9` or `-<+`
+> > - 🍌 `11` or `->+`
+> > - 🍉 `12` or `+<-`
+> > - 🍏 `16` or `-<-<`
+> > - 🍋 `27` or `+<+>`
+> > - 🍑 `42` or `->->-`
+> > - 🍊 `62` or `+>+>-`
+> > - 🍍 `87` or `->->+>`  # heuristic for these mathematically
+> > - 🍒 `126` or `+>+>+-`
+> {: .solution}
+{: .exercise}
 
 - [“The Subject and its Legs”](https://urbit.org/docs/hoon/hoon-school/the-subject-and-its-legs)
 
@@ -166,8 +193,25 @@ For instance, the random number generator uses the system entropy `eny` to produ
 
 To build a door, use the `|_` barcab rune to produce a core with multiple arms (and no default `$` buc arm).  A running program agent is a door, so we will work more with these incidentally tomorrow.
 
+This is part of the digit-to-cord display door:
+
 ```hoon
-|_  TODO
+++  ne
+  |_  tig=@
+  ++  d  (add tig '0')
+  ++  x  ?:((gte tig 10) (add tig 87) d)
+  ++  v  ?:((gte tig 10) (add tig 87) d)
+  ++  w  ?:(=(tig 63) '~' ?:(=(tig 62) '-' ?:((gte tig 36) (add tig 29) x)))
+  --
+```
+
+`++ne` is used as follows:
+
+```hoon
+`@t`~(d ne 7)   :: decimal digit as cord
+`@t`~(x ne 14)  :: hexadecimal digit as cord
+`@t`~(v ne 25)  :: base-32 digit as cord
+`@t`~(w ne 52)  :: base-64 digit as cord
 ```
 
 > ## Custom Types
@@ -421,9 +465,7 @@ To match a particular mold, you can specify from this table, with atoms expandin
 
 The generator itself consists of a cell `[%say hoon]`, where `hoon` is the rest of the code.  The `%say` metadata tag indicates to Arvo what the expected structure of the generator is _qua_ `%say` generator.
 
-In general, a `%say` generator doesn't need a sample (input arguments) to complete:  Arvo can elide that if necessary.
-
-More generally, a `%say` generator TODO
+In general, a `%say` generator doesn't need a sample (input arguments) to complete:  Arvo can elide that if necessary.  More generally, though, a `%say` generator is useful any time a calculation needs to depend on user input or system parameters (beyond the static system library).
 
 The maximalist `sample` is a 3-tuple:  `[[now eny beak] ~[unnamed arguments] ~[named arguments]]`.
 
@@ -491,7 +533,7 @@ We can incorporate optional arguments although without default values (i.e., the
 (add val 2)
 ```
 
-To use it:
+To use it (saved as `gen/gate.hoon` and `|commit`ed):
 
 ```hoon
 +g =val 4
@@ -500,8 +542,6 @@ To use it:
 Since the default value is `~`, if you are testing for the presence of named arguments you should test against that value.
 
 Note that, in all of these cases, you are writing a gate `|=` bartis which accepts `[* * ~]` or the like as sample.  Dojo (and Arvo generally) recognizes that `%say` generators have a special format and parse the command-line form into appropriate form for the gate itself.
-
-TODO commas
 
 - Reading: [Tlon Corporation, "Generators"](https://urbit.org/docs/tutorials/hoon/generators/), sections "%say Generators", "%say generators with arguments", "Arguments without a cell"
 

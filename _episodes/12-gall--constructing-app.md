@@ -83,7 +83,7 @@ keypoints:
 >
 > For this example, we are omitting obtaining an authentication token and providing a cookie with each `curl` action.  In production, you will commonly use the `++require-authorization:app:server` gate to make sure that any outside calls are in fact authorized.
 >
-> There is a good example of this usage in `~timluc-miptev`'s [`%gall` tutorial](https://github.com/timlucmiptev/gall-guide/blob/master/example-code/app/gall-test2.hoon#L66).
+> There is a good example of this usage in `~timluc-miptev`'s [`%gall` tutorial](https://github.com/timlucmiptev/gall-guide/blob/master/example-code/app/gall-test2.hoon#L66) and in the [“`%eyre` External API Reference” docs](https://urbit.org/docs/arvo/eyre/external-api-ref).
 {: .callout}
 
 {% include links.md %}

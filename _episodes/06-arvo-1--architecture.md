@@ -13,127 +13,76 @@ keypoints:
 - "The binary executable is separated into king and serf, the system state, an event log and runtime support."
 ---
 
-Urbit bills itself as a “XXX operating function.”  Now that you have some of the syntax of Hoon under your belt, we can examine what the kernel does to implement these features.  In brief, these are the selling points I make to any developer who asks, “Why bother with Urbit?”
+Urbit bills itself as a “clean-slate operating system” or “operating function”.  Now that you have some of the syntax of Hoon under your belt, we can examine what the kernel does to implement these features.  In brief, these are the selling points I make to any developer who asks, “Why bother with Urbit?”
+
+> [Urbit] solves the hard problems of implementing a peer-to-peer network (including identity, NAT traversal, and exactly-once delivery) in the kernel so app developers can focus on business logic.
+>
+> The entire OS is a single pure function that provides application developers with strong guarantees: automated persistence and memory management, repeatable builds, and support for hot code reloading.
+
+<!-- NAT = network address translation -->
+
+My partial summary is that Urbit offers the developer:
 
 1. Cryptographic identity.
 2. Version-controlled typed filesystem.
 3. Authentication primitives.
 4. Persistent database.
-TODO pull that dcSpark tweet thread
+
+That is, once you've done the admittedly hard shovel work of learning Urbit and building on it, you get a number of nice guarantees for “free,” or at least able to be taken for granted.
 
 We could do worse than to start our exploration of the Urbit kernel than to quote the Whitepaper itself on the subject of Arvo:
 
-\begin{quote}
-The fundamental unit of the Urbit kernel is an event called a \texttt{+\$move}.  Arvo is primarily an event dispatcher between moves created by vanes.  Each move therefore has an address and other structured information.  (\cite{Yarvin2017})
-\end{quote}
+> The fundamental unit of the Urbit kernel is an event called a `+$move`.  Arvo is primarily an event dispatcher between moves created by vanes.  Each move therefore has an address and other structured information.
 
-Every vane defines its own structured events (\texttt{+\$move}s).  Each unique kind of structured event has a unique, frequently whimsical, name.  This can make it challenging to get used to how a particular vane behaves.
+Arvo is the main lifecycle function which handles these discrete events.  What initiates and handles events?  These are the _vanes_, standardized system services.  Every vane defines its own structured events (`+$move`s).  Each unique kind of structured event has a unique, frequently whimsical, name.  This can make it challenging to get used to how a particular vane behaves.
 
-\marginnote[2mm]{The system-level instrumentation of Arvo is described in Chapter~\ref{support}.}
+Arvo is essentially an event handler which can coordinate and dispatch messages between vanes as well as emit Unix `%unix` events (side effects) to the underlying (presumed Unix-compatible) host OS.  Arvo as hosted OS does not carry out any tasks specific to the machine hardware, such as memory allocation, system thread management, and hardware- or firmware-level operations.  These are left to the _king_ and _serf_, the daemon runtime processes which together run Arvo.
 
-Arvo is essentially an event handler which can coordinate and dispatch messages between vanes as well as emit \unix~events (side effects) to the underlying (presumed Unix-compatible) host OS.  Arvo as hosted OS does not carry out any tasks specific to the machine hardware, such as memory allocation, system thread management, and hardware- or firmware-level operations.  These are left to the \emph{king} and \emph{serf}, the daemon processes which together run Arvo.
+Arvo is architected as a state machine, the deterministic end result of the event log.  We need to briefly examine Arvo from two separate angles:
 
-Arvo is architected as a state machine, the deterministic end result of the event log.  We need to examine Arvo from two separate angles:
+1.  Event processing engine and state machine (vane coordinator).
+2.  Standard noun structure (“Arvo-shaped noun”).
 
-\begin{enumerate}
-  \item  Event processing engine and state machine (vane coordinator)
-  \item  Standard noun structure (“Arvo-shaped noun”)
-\end{enumerate}
+### Arvo as Event Processing Engine
 
-\subsection{Event Processing Engine}
-\labsec{kr:arvo-state}
+> A vanilla event loop scales poorly in complexity.  A system event is the trigger for a cascade of internal events; each event can schedule any number of future events.  This easily degenerates into “event spaghetti.”  Arvo has “structured events”; it imposes a stack discipline on event causality, much like imposing subroutine structure on `goto`s.
 
-\begin{quote}
-A vanilla event loop scales poorly in complexity.  A system event is the trigger for a cascade of internal events; each event can schedule any number of future events.  This easily degenerates into “event spaghetti.”  Arvo has “structured events”; it imposes a stack discipline on event causality, much like imposing subroutine structure on \texttt{goto}s.  (\cite{Yarvin2017})
-\end{quote}
+Arvo events (`+$move`s) contain metadata and data.  Arvo recognizes three types of moves:
 
-Arvo events are known as \texttt{++move}s, containing metadata and data.  Arvo recognizes four types of moves:
+1.  `%pass` events are forward calls from one vane to another (or back to itself, occasionally), and
+2.  `%give` events are returned values and move back along the calling duct.
+3.  `%unix` events communicate from Arvo to the underlying binary in such a way as to emit an external effect (an `%ames` network communication, for instance, or text input and output).
 
-\begin{enumerate}
-  \item  \pass~events are forward calls from one vane to another (or back to itself, occasionally), and
-  \item  \give~events are returned values and move back along the calling duct.
-  \item  \slip~events [TODO think of like ref counting?].  (\slip~events are common only in the initial system boot process or in over-the-air updates to Arvo.)
-  \item  \unix~events communicate from Arvo to the underlying binary in such a way as to emit an external effect (an \ames~network communication, for instance, or text input and output).
-\end{enumerate}
+TODO show structure of a card
 
-show structure of a card
+A bit more terminology:
 
-"Each vane defines a protocol for interacting with other vanes (via Arvo) by defining four types of cards: tasks, gifts, notes, and signs."
-"In other words, there are only four ways of seeing a move: (1) as a request seen by the caller, which is a note. (2) that same request as seen by the callee, a task. (3) the response to that first request as seen by the callee, a gift. (4) the response to the first request as seen by the caller, a sign."
-(TODO move trace work here)
+- A _move_ is a cause and action.
+- A _card_ is an event.  TODO beef this up
 
-Without reference to the particular content of vanes, let us briefly diagram a “move trace”, or examination of how an event generated by a vane produces results via Arvo.
+> Each vane defines a protocol for interacting with other vanes (via Arvo) by defining four types of cards: tasks, gifts, notes, and signs.
+>
+> In other words, there are only four ways of seeing a move:
+> 1. as a request seen by the caller, which is a `note`.
+> 2. that same request as seen by the callee, a `task`.
+> 3. the response to that first request as seen by the callee, a `gift`.
+> 4. the response to the first request as seen by the caller, a `sign`.
 
-TODO remote call via \ames?
+There is an excellent [“move trace” tutorial](https://urbit.org/docs/arvo/tutorials/move-trace) on Urbit.org which covers this in detail.  We don't need to deeply understand this terminology to understand that events are generated by vanes, dispatched by Arvo, and resolved by vanes.
 
-\begin{quote}
-"An interrupted event never happened.  The computer is deterministic; an event is a transaction; the event log is a log of successful transactions. In a sense, replaying this log is not Turing complete. The log is an existence proof that every event within it terminates.  (\cite{Yarvin2017})
-\end{quote}
+> An interrupted event never happened.  The computer is deterministic; an event is a transaction; the event log is a log of successful transactions. In a sense, replaying this log is not Turing complete. The log is an existence proof that every event within it terminates.
 
-\begin{example}{Tradecraft:  Tracing}
-Now that we have discussed how Arvo processes events, we can turn our attention to how particular real events are actually processed.
-
-Urbit supports tracing the behavior of each event using a command-line flag, conventionally \texttt{-j}.  Start an existing Urbit ship using
-
-\begin{lstlisting}[language=bash,
-                   style=nonumbers]
-$ urbit -j sampel-palnet
-\end{lstlisting}
-
-Initiate an event:
-
-\begin{lstlisting}[language=hoon,
-                   style=nonumbers]
-> (add 1 2)
-\end{lstlisting}
-
-Tracefiles will appear in \texttt{sampel-palnet/.urb/put/trace}.  Copy these JSON files to a working directory and open them using an appropriate utility.  There may be some lag in generating the tracefiles, and it requires discernment to locate the relevant move trace elements.
-
-TODO
-\end{example}
-
-\begin{example}{Tradecraft:  Profiling}
-  Urbit supports profiling the performance of event handling using a command-line flag, conventionally \texttt{-P}.  Start an existing Urbit ship using
-
-  \begin{lstlisting}[language=bash,
-                     style=nonumbers]
-  $ urbit -P sampel-palnet
-  \end{lstlisting}
-
-  Initiate an event:
-
-  \begin{lstlisting}[language=hoon,
-                     style=nonumbers]
-  > (add 1 2)
-  \end{lstlisting}
-
-  Profiling files will appear in \texttt{sampel-palnet/.urb/put/profile}.  Copy these text files to a working directory and open them using an appropriate utility.
-
-TODO
-\end{example}
-
-\subsection{Standard Noun Structure}
-\labsec{kr:arvo-noun}
+### Arvo as Standard Noun Structure
 
 Arvo defines five standard arms for vanes and the binary runtime to use:
 
-\begin{enumerate}
-  \item  \texttt{++peek} grants read-only access to a vane; this is called a \emph{scry}.
-  \item  \texttt{++poke} accepts \texttt{++move}s and processes them; this is the only arm that actually alters Arvo's state.
-  \item  \texttt{++wish} accepts a core and parses it against \zuse.
-  \item  \texttt{++come} and \texttt{++load} are used in kernel upgrades, allowing Arvo to update itself in-place.
-\end{enumerate}
+-  `++peek` grants read-only access to a vane; this is called a _scry_.
+-  `++poke` accepts `++move`s and processes them; this is the only arm that actually alters Arvo's state.
+-  `++wish` accepts a core and parses it against `%zuse`, which is instrumentation for runtime access.
+-  `++come` and `++load` are used in kernel upgrades, allowing Arvo to update itself in-place.
 
+Each arm possesses this same structure, which means that as the Urbit OS kernel grows and changes the main event dispatcher can remain the same.  For instance, when the build vane `%ford` was incorporated into `%clay`, no brain surgery was needed on Arvo to make this possible and legible.  Only the affected vanes (and any calls to `%ford`) needed to change.
 
-\href{Arvo tutorial}{https://urbit.org/docs/arvo/overview/}
-
-\subsection[\zuse~\&~\lull]{\zuse~and \lull}
-\labsec{zuse}
-
-\zuse~and \lull~define common structures and library functions for Arvo.
-
-subject wrapped
-
-
+- [“Arvo tutorial”](https://urbit.org/docs/arvo/overview/)
 
 {% include links.md %}
