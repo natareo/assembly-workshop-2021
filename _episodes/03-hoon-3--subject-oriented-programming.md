@@ -40,7 +40,7 @@ Hoon developers frequently talk about “limbs” of the subject.  Arms describe
 >
 > Produce the numeric and lark-notated equivalent addresses for each of the following nodes in the binary fruit tree:
 >
-> ![](img/binary-tree-fruit.png)
+> ![A fruit tree](https://raw.githubusercontent.com/natareo/assembly-workshop-2021/gh-pages/img/binary-tree-fruit.png)
 >
 > - 🍇
 > - 🍌
