@@ -27,7 +27,7 @@ We will proceed at first by simply providing examples of fully-formed `%gall` ag
 
 Before we do anything substantial with `%gall`, however, we are simply going to look at a minimal working example.  This is the equivalent of a `pass` statement, it does nothing and talks to no one, whistling in the dark.
 
-**`app/eggs.hoon`**
+**`/app/eggs.hoon`**
 
 ```hoon
 /-  eggs
@@ -124,11 +124,11 @@ At each point, you can check the internal state using the `debug` subject wrappe
 :eggs +dbug
 ```
 
-Any nontrivial app needs to define some shared files, which is one of the reasons this is an elephant.  In particular, a shared structure in `sur/` and a mark in `mar/` are required to handle data transactions.
+Any nontrivial app needs to define some shared files, which is one of the reasons this is an elephant.  In particular, a shared structure in `/sur` and a mark in `/mar` are required to handle data transactions.
 
 The shared structure defines common molds like actions and expected structural definitions (e.g. as tagged unions or associative arrays).
 
-**`sur/eggs.hoon`**
+**`/sur/eggs.hoon`**
 
 ```hoon
 |%
@@ -140,7 +140,7 @@ The shared structure defines common molds like actions and expected structural d
 
 Most marks are straightforward or can be developed by glancing at others.
 
-**`mar/eggs/action.hoon`**
+**`/mar/eggs/action.hoon`**
 
 ```hoon
 /-  eggs
@@ -159,8 +159,8 @@ Most marks are straightforward or can be developed by glancing at others.
 
 > ##  Exercise
 >
-> - Examine `sur/file-server.hoon`
-> - Examine `mar/json.hoon`
+> - Examine `/sur/dns.hoon` (basic) or `/sur/bitcoin.hoon` (advanced).
+> - Examine `/mar/json.hoon`.
 {: .exercise}
 
 > ## A Shell Script
@@ -238,7 +238,7 @@ A `%gall` `path` could look like this:
 
 So this is _called_ a `path` but it's really a complete package of request type, agent information, and data with metadata.
 
-> ##  Agents and Apps
+> ##  Agents v. Apps
 >
 > The terminology for userspace has not yet completely solified.  I strive to use “agent” to refer to a particular running instance, like a “container” in Docker, whereas an “app” is more like a Docker “image”, the archetypal instance.  However, I will frequently and inadvertently use “agent” in synecdoche to refer to apps.
 {: .callout}
