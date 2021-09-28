@@ -10,12 +10,10 @@ objectives:
 keypoints:
 - "A `%gall` app can be outfitted with a helper core to provide necessary operations."
 ---
-FIXME
-
-Arvo defines a number of standard operations for each vane.  Notable among these are `++peek`, which grants read-only access to data, called a _scry_; and `++poke`, which accepts moves and processes them.  Pokes actually alter Arvo's state (rather than just retrieve information).
 
 Generally speaking, the Urbit data flow model is _reactive_, meaning that rather than poll for updates periodically one _subscribes_ to a data source which notifies all subscribers when a change occurs.
 
+Arvo defines a number of standard operations for each vane.  Notable among these are `++peek`, which grants read-only access to data, called a _scry_; and `++poke`, which accepts moves and processes them.  Pokes actually alter Arvo's state (rather than just retrieve information).
 
 We are going to widen our view a little bit as well with this agent:  we will not use the `default` arms but will define our own NOP defaults.  This way you will be able to see what sort of information each arm processes.
 

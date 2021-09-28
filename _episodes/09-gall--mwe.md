@@ -27,10 +27,10 @@ We will proceed at first by simply providing examples of fully-formed `%gall` ag
 
 Before we do anything substantial with `%gall`, however, we are simply going to look at a minimal working example.  This is the equivalent of a `pass` statement, it does nothing and talks to no one, whistling in the dark.
 
-**`app/egg.hoon`**
+**`app/eggs.hoon`**
 
 ```hoon
-/-  graph-store
+/-  eggs
 /+  default-agent, dbug
 |%
 +$  versioned-state
@@ -38,7 +38,7 @@ Before we do anything substantial with `%gall`, however, we are simply going to 
   ==
 ::
 +$  state-0
-  $:  [%0 hexes=`(list @ux)`]
+  $:  [%0 hexes=(list @ux)]
   ==
 ::
 +$  card  card:agent:gall
@@ -56,20 +56,28 @@ Before we do anything substantial with `%gall`, however, we are simply going to 
 ::
 ++  on-init
   ^-  (quip card _this)
-  ~&  >  '%egg initialized successfully'
+  ~&  >  '%eggs initialized successfully'
   =.  state  [%0 *(list @ux)]
-  `this(state prev)
-  ==
+  `this
 ++  on-save   on-save:default
 ++  on-load   on-load:default
 ++  on-poke
   |=  [=mark =vase]
   ^-  (quip card _this)
-  =^  cards  state
-    ?+    mark  (on-poke:default mark vase)
+  ?+    mark  (on-poke:default mark vase)
+      %noun
+    ?+    q.vase  (on-poke:default mark vase)
+        %print-state
+      ~&  >>  state
+      ~&  >>>  bowl  `this
+    ==
     ::
-      %take-action
-    (handle-action:main !<(action vase))
+      %eggs-action
+    ~&  >  %eggs-action
+    =^  cards  state
+    (handle-action:main !<(action:eggs vase))
+    [cards this]
+  ==
 ++  on-arvo   on-arvo:default
 ++  on-watch  on-watch:default
 ++  on-leave  on-leave:default
@@ -79,12 +87,13 @@ Before we do anything substantial with `%gall`, however, we are simply going to 
 --
 |_  =bowl:gall
 ++  handle-action
-  |=  =action
+  |=  =action:eggs
   ^-  (quip card _state)
   ?-    -.action
     ::
       %append-value
-    =.  hexes.state  (weld hexes.state value.action)
+    =.  hexes.state  (weld hexes.state ~[value.action])
+    ~&  >>  hexes.state
     :_  state
     ~[[%give %fact ~[/hexes] [%atom !>(hexes.state)]]]
   ==
@@ -96,45 +105,49 @@ Before we do anything substantial with `%gall`, however, we are simply going to 
 Install this agent by copying in these files:
 
 ```sh
-cp -r gall-egg/* zod/home
+cp -r src/gall-eggs/* zod/home
 ```
 
-Run this
+(We'll use a shell script introduced a bit later on to assist with this.)
+
+Run the following:
 
 ```hoon
-:egg &take-action ~[%append-value 0xdead.beef]
+|start %eggs
+:eggs &eggs-action append-value+0xdead.beef
+:eggs %print-state
 ```
 
 At each point, you can check the internal state using the `debug` subject wrapper:
 
 ```hoon
-:egg +dbug
+:eggs +dbug
 ```
 
 Any nontrivial app needs to define some shared files, which is one of the reasons this is an elephant.  In particular, a shared structure in `sur/` and a mark in `mar/` are required to handle data transactions.
 
-The shared structure defines common molds like actions and expected structural definitions (like tagged unions or associative arrays).
+The shared structure defines common molds like actions and expected structural definitions (e.g. as tagged unions or associative arrays).
 
-**`sur/egg.hoon`**
+**`sur/eggs.hoon`**
 
 ```hoon
 |%
 +$  action
-  $%  [%append-value value=@ud]
+  $%  [%append-value value=@ux]
   ==
 --
 ```
 
-Most marks are straightforward or can be developed by glancing
+Most marks are straightforward or can be developed by glancing at others.
 
-**`mar/action/egg.hoon`**
+**`mar/eggs/action.hoon`**
 
 ```hoon
-/-  egg
-|_  action=action:egg
+/-  eggs
+|_  =action:eggs
 ++  grab
   |%
-  ++  noun  action:egg
+  ++  noun  action:eggs
   --
 ++  grow
   |%
@@ -144,10 +157,34 @@ Most marks are straightforward or can be developed by glancing
 --
 ```
 
-Exercise:
+> ##  Exercise
+>
+> - Examine `sur/file-server.hoon`
+> - Examine `mar/json.hoon`
+{: .exercise}
 
-- Examine `sur/file-server.hoon`
-- Examine `mar/json.hoon`
+> ## A Shell Script
+>
+> Place this shell script into your root working directory and use it to update each `%gall` agent:
+>
+> ```sh
+> #! /bin/sh
+> mkdir -p $1/home/mar/$2
+> yes | cp $2/src/mar/action.hoon $1/home/mar/$2
+> yes | cp $2/src/sur/$2.hoon $1/home/sur
+> yes | cp $2/src/app/$2.hoon $1/home/app
+> ```
+>
+> Usage:
+>
+> ```sh
+> ./copy-in.sh zod eggs
+> ```
+>
+> Note that this assumes you have already run `|mount %` and that you run `|commit %home` after each Unix-side update.
+{: .callout}
+
+### How It Works
 
 Every Gall agent is a door with two components in its subject:
 
