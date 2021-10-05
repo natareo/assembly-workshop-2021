@@ -10,19 +10,17 @@ keypoints:
 - "A `%gall` app can be readily produced to a standard of operability."
 ---
 
-> ##  Building `%moth` to Count Pokes
+> ##  Building `%delta` to Count Pokes
 >
-> _This entire section is a team exercise.  You should work in a GitHub repository to which you all have access.  [Import](https://github.com/new/import) (don't fork) the `https://github.com/sigilante/gall-moth` repo to one of your team's accounts and give the other members collaborator access to the repo (in [Settings](https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-github-user-account/managing-user-account-settings/permission-levels-for-a-user-account-repository))._
+> _This entire section is a team exercise.  You should work in a GitHub repository to which you all have access.  [Import](https://github.com/new/import) (don't fork) the `https://github.com/sigilante/gall-delta` repo to one of your team's accounts and give the other members collaborator access to the repo (in [Settings](https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-github-user-account/managing-user-account-settings/permission-levels-for-a-user-account-repository))._
 >
-> <iframe width="888" height="500" src="https://www.youtube.com/embed/NvDykbjfYfs" title="Jethro Tull, “Moths”" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
->
-> Your team's objective is to update the `%moth` agent to do the following:
+> Your team's objective is to update the `%delta` agent to do the following:
 >
 > 1. Accept `PUT` messages of JSON (via `curl`, for instance).  The message should contain a target ship.
 > 2. Upon receipt of a JSON request, extract the target ship and send a poke.
 > 3. Upon receipt of a poke, increment a counter for that ship and display the current count.  (E.g., `~wes: 5`)
 >
-> ### Notate Bene
+> ### Notes
 >
 > - While it is possible to set up a remote Urbit testnet, for our purposes it is simpler to test the agent using two (or more) fakezods on a single computer.
 >
@@ -33,9 +31,9 @@ keypoints:
 > - You can distinguish output lines visually using the `>`/`>>`/`>>>` syntax for `~&`:
 >
 >     ```hoon
->     ~&  >  "log"
->     ~&  >>  "warning"
->     ~&  >>>  "error"
+>     ~&  >  "log"        :: blue (log)
+>     ~&  >>  "warning"   :: yellow (warning)
+>     ~&  >>>  "error"    :: red (error)
 >
 > - You should store the sending ship and counter as a `map`.  Use the `++by` door to work with `map`s.
 >
@@ -49,23 +47,22 @@ keypoints:
 >       :~  [%ship so:dejs-soft:format]   :: only bother extracting these
 >           [%json so:dejs-soft:format]   ::   two keys from the JSON
 >       ==
->     ++  req-parser-target               :: parser for internal JSON request
->       %-  ot:dejs-soft:format
->       :~  [%ship so:dejs-soft:format]   :: we only care about the target ship
->       ==
 >     ::
 >     :: ...
 >     ::
->     =/  myjson  '{"ship":"zod","action":"poke","app":"moth","json":"{\"ship\":\"~nec\"}","mark":"noun"}'
->     =/  payload  (de-json:html myjson)  :: convert cord to JSON structure
->     ?~  payload  !!                     :: crash on empty payload
+>     =/  myjson  '{"ship":"zod","action":"poke","app":"delta","json":"~nec"}","mark":"noun"}'
+>     =/  payload  (de-json:html `@t`+511:req)
+>     ?~  payload  !!
 >     =/  payload-array  u:+.payload
->     =/  st  u:+:(req-parser-req payload-array)  :: extract ship+json
->     =/  source  -.st
->     =/  target-payload  (de-json:html +.st)     :: repeat on the inner JSON
->     =/  ship  (req-parser-target +.target-payload)
->     ?~  ship  !!                        :: crash on no-ship
->     =/  target  u:+:`(unit @p)`(slaw %p +.ship) :: convert @t to @p w/ ++slaw
+>     =/  st  u:+:(req-parser-ot payload-array)
+>     =/  source-t  (trip -.st)
+>     =/  source
+>       ?:  =('~' (snag 0 source-t))  u:+:`(unit @p)`(slaw %p (crip source-t))
+>       u:+:`(unit @p)`(slaw %p (crip (weld "~" source-t)))
+>     =/  target-t  (trip +.st)
+>     =/  target
+>       ?:  =('~' (snag 0 target-t))  u:+:`(unit @p)`(slaw %p (crip target-t))
+>       u:+:`(unit @p)`(slaw %p (crip (weld "~" target-t)))
 >     ```
 >
 > - To send a JSON object to the Urbit ship with a `PUT` request, use `curl`:
@@ -74,7 +71,7 @@ keypoints:
 >     curl \
 >     --header "Content-Type: application/json" \
 >     --request PUT \
->     --data '{"ship":"zod","action":"poke","app":"moth","json":"{\"ship\":\"~nec\"}","mark":"noun"}' \
+>     --data '{"ship":"zod","action":"poke","app":"delta","json":"~nec","mark":"noun"}' \
 >     http://localhost:8080/~checkAuth
 >     ```
 {: .exercise}

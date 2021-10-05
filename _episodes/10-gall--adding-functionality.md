@@ -17,10 +17,10 @@ Arvo defines a number of standard operations for each vane.  Notable among these
 
 We are going to widen our view a little bit as well with this agent:  we will not use the `default` arms but will define our own `NOP` defaults.  This way you will be able to see what sort of information each arm processes.
 
-**`/app/grub.hoon`**:
+**`/app/bravo.hoon`**:
 
 ```hoon
-/-  grub
+/-  bravo
 /+  default-agent, dbug
 |%
 +$  versioned-state
@@ -46,7 +46,7 @@ We are going to widen our view a little bit as well with this agent:  we will no
 ::
 ++  on-init
   ^-  (quip card _this)
-  ~&  >  '%grub initialized successfully'
+  ~&  >  '%bravo initialized successfully'
   =.  state  [%0 *(list @ux)]
   `this
 ::
@@ -57,7 +57,7 @@ We are going to widen our view a little bit as well with this agent:  we will no
 ++  on-load
   |=  old-state=vase
   ^-  (quip card _this)
-  ~&  >  '%grub recompiled successfully'
+  ~&  >  '%bravo recompiled successfully'
   `this(state !<(versioned-state old-state))
 ::
 ++  on-poke
@@ -71,10 +71,10 @@ We are going to widen our view a little bit as well with this agent:  we will no
       ~&  >>>  bowl  `this
     ==
     ::
-      %grub-action
-    ~&  >  %grub-action
+      %bravo-action
+    ~&  >  %bravo-action
     =^  cards  state
-    (handle-action:main !<(action:grub vase))
+    (handle-action:main !<(action:bravo vase))
     [cards this]
   ==
 ::
@@ -104,7 +104,7 @@ We are going to widen our view a little bit as well with this agent:  we will no
 --
 |_  =bowl:gall
 ++  handle-action
-  |=  =action:grub
+  |=  =action:bravo
   ^-  (quip card _state)
   ?-    -.action
     ::
@@ -123,7 +123,7 @@ We are going to widen our view a little bit as well with this agent:  we will no
 --
 ```
 
-You should copy the structure file and mark file from `%eggs` and adapt them as appropriate for `%grub`.  This should be a matter of copying to the appropriate path and changing any internal references.
+You should copy the structure file and mark file from `%alfa` and adapt them as appropriate for `%bravo`.  This should be a matter of copying to the appropriate path and changing any internal references.
 
 The structure file should accommodate the following actions:
 
@@ -155,8 +155,8 @@ For this case, we only need to return data, so we will only support `%gx` scries
 Both of these results are directly accessible via `.^` dotket scries:
 
 ```hoon
-.^((list @ux) %gx /=grub=/hexes/noun)
-.^(noun %gx /=grub=/no-result/noun)
+.^((list @ux) %gx /=bravo=/hexes/noun)
+.^(noun %gx /=bravo=/no-result/noun)
 ```
 
 > ##  `unit`s, `cage`s, and `vase`s, Oh My!

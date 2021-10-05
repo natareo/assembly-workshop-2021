@@ -27,10 +27,10 @@ We will proceed at first by simply providing examples of fully-formed `%gall` ag
 
 Before we do anything substantial with `%gall`, however, we are simply going to look at a minimal working example.  This is the equivalent of a `pass` statement, it does nothing and talks to no one, whistling in the dark.
 
-**`/app/eggs.hoon`**
+**`/app/alfa.hoon`**
 
 ```hoon
-/-  eggs
+/-  alfa
 /+  default-agent, dbug
 |%
 +$  versioned-state
@@ -56,7 +56,7 @@ Before we do anything substantial with `%gall`, however, we are simply going to 
 ::
 ++  on-init
   ^-  (quip card _this)
-  ~&  >  '%eggs initialized successfully'
+  ~&  >  '%alfa initialized successfully'
   =.  state  [%0 *(list @ux)]
   `this
 ++  on-save   on-save:default
@@ -72,10 +72,10 @@ Before we do anything substantial with `%gall`, however, we are simply going to 
       ~&  >>>  bowl  `this
     ==
     ::
-      %eggs-action
-    ~&  >  %eggs-action
+      %alfa-action
+    ~&  >  %alfa-action
     =^  cards  state
-    (handle-action:main !<(action:eggs vase))
+    (handle-action:main !<(action:alfa vase))
     [cards this]
   ==
 ++  on-arvo   on-arvo:default
@@ -87,7 +87,7 @@ Before we do anything substantial with `%gall`, however, we are simply going to 
 --
 |_  =bowl:gall
 ++  handle-action
-  |=  =action:eggs
+  |=  =action:alfa
   ^-  (quip card _state)
   ?-    -.action
     ::
@@ -105,7 +105,7 @@ Before we do anything substantial with `%gall`, however, we are simply going to 
 Install this agent by copying in these files:
 
 ```sh
-cp -r src/gall-eggs/* zod/home
+cp -r src/gall-alfa/* zod/home
 ```
 
 (We'll use a shell script introduced a bit later on to assist with this.)
@@ -113,22 +113,22 @@ cp -r src/gall-eggs/* zod/home
 Run the following:
 
 ```hoon
-|start %eggs
-:eggs &eggs-action append-value+0xdead.beef
-:eggs %print-state
+|start %alfa
+:alfa &alfa-action append-value+0xdead.beef
+:alfa %print-state
 ```
 
 At each point, you can check the internal state using the `debug` subject wrapper:
 
 ```hoon
-:eggs +dbug
+:alfa +dbug
 ```
 
 Any nontrivial app needs to define some shared files, which is one of the reasons this is an elephant.  In particular, a shared structure in `/sur` and a mark in `/mar` are required to handle data transactions.
 
 The shared structure defines common molds like actions and expected structural definitions (e.g. as tagged unions or associative arrays).
 
-**`/sur/eggs.hoon`**
+**`/sur/alfa.hoon`**
 
 ```hoon
 |%
@@ -140,14 +140,14 @@ The shared structure defines common molds like actions and expected structural d
 
 Most marks are straightforward or can be developed by glancing at others.
 
-**`/mar/eggs/action.hoon`**
+**`/mar/alfa/action.hoon`**
 
 ```hoon
-/-  eggs
-|_  =action:eggs
+/-  alfa
+|_  =action:alfa
 ++  grab
   |%
-  ++  noun  action:eggs
+  ++  noun  action:alfa
   --
 ++  grow
   |%
@@ -178,7 +178,7 @@ Most marks are straightforward or can be developed by glancing at others.
 > Usage:
 >
 > ```sh
-> ./copy-in.sh zod eggs
+> ./copy-in.sh zod alfa
 > ```
 >
 > Note that this assumes you have already run `|mount %` and that you run `|commit %home` after each Unix-side update.
