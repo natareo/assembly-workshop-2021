@@ -69,6 +69,8 @@ We are going to widen our view a little bit as well with this agent:  we will no
         %print-state
       ~&  >>  state
       ~&  >>>  bowl  `this
+        [%print-pop @ux]
+      ~&  >>  +>:vase  `this
     ==
     ::
       %bravo-action
@@ -115,10 +117,13 @@ We are going to widen our view a little bit as well with this agent:  we will no
     ~[[%give %fact ~[/hexes] [%atom !>(hexes.state)]]]
     ::
       %pop
+    =/  popped  (rear hexes.state)
     =.  hexes.state  (snip hexes.state)
     ~&  >>  hexes.state
     :_  state
-    ~[[%give %fact ~[/hexes] [%atom !>(hexes.state)]]]
+    :~  [%give %fact ~[/hexes] [%atom !>(hexes.state)]]
+        [%pass /print-pop %agent [our.bowl %charlie] %poke %noun !>([%print-pop popped])]
+    ==
   ==
 --
 ```
@@ -134,14 +139,11 @@ We will also accommodate external scrying into the agent through the `++on-peek`
 
 ```hoon
 ++  on-peek
-  |=  pax=path
+  |=  =path
   ^-  (unit (unit cage))
-  ?+    pax  (on-peek:def pax)
+  ?+    path  (on-peek:default path)
       [%x %hexes ~]
     ``noun+!>(hexes)
-    ::
-      [%x %no-result ~]
-    [~ ~]
   ==
 ```
 
@@ -150,13 +152,12 @@ This arm typically accepts two kinds of scries (called _cares_):
 - `%x` represents data.  `%x` scries typically return a `cage` with mark.
 - `%y` represents paths.  `%y` will return a `cage` of mark `%arch` and vase type `arch`.
 
-For this case, we only need to return data, so we will only support `%gx` scries.
+For this case, we only need to return data, so we will only support `%gx` scries.  (We have nothing path-like in this agent.)
 
-Both of these results are directly accessible via `.^` dotket scries:
+Scry results are directly accessible via `.^` dotket operations at the Dojo prompt (and more generally to other agents).  However, scries can only be performed locally—there are no remote scries as a security mechanism.  Remote agent data must be formally requested via a poke and return.
 
 ```hoon
 .^((list @ux) %gx /=bravo=/hexes/noun)
-.^(noun %gx /=bravo=/no-result/noun)
 ```
 
 > ##  `unit`s, `cage`s, and `vase`s, Oh My!

@@ -201,6 +201,8 @@ The Hoon standard library is split between `sys/hoon.hoon` and `sys/zuse.hoon`. 
 
 Most of the text parsing library is built to process Hoon itself, and a variety of rule parsers and analyzers have been built up to this end.  However, we are interested in the much simpler case of loading a structured text string and converting it to some sort of internal Hoon representation.
 
+#### Urbit Types from `@t`
+
 Frequently, one receives plaintext data from some source (like an HTTP `PUT` request) and needs to convert it to a Hoon-compatible atom format.  Alternatively, one needs to convert from a raw Hoon atom into a text representation.  `++slaw` and `++scot` provide this functionality:
 
 ```hoon
@@ -212,30 +214,6 @@ Frequently, one receives plaintext data from some source (like an HTTP `PUT` req
 
 - `++slaw` converts a given `@t` `cord` by a designated aura into a `unit` of that aura.
 - `++scot` converts a given value of any type into a target `@ta` representation of that value as a given aura.  (See also `++scow` to convert to a `tape`.)
-
-> ## Tabular Data (Optional)
->
-> The basic case of structured data looks something like a CSV file:  sequential lines of information separated by a delimiter, in this case a comma.
->
-> ```csv
-> Los Angeles,34°03′N,118°15′W
-> New York City,40°42′46″N,74°00′21″W
-> Paris,48°51′24″N,2°21′03″E
-> ```
->
-> We can think about this at two levels:  the actual text parsing itself (character-by-character) or by wrapping the functionality into a gate.
->
-> From the docs:
->
-> - A `hair` is the position in the text the parser is at,
-> - A `nail` is parser input,
-> - An `edge` is parser output,
-> - A `rule` is a parser.
->
-> TODO
->
-> - [“Parsing”](https://urbit.org/docs/hoon/guides/parsing)
-{: .callout}
 
 #### JSON Structured Data
 
@@ -291,12 +269,24 @@ We have to build a parser to extract expected values (and ignore others).
 ```hoon
 > =parser %-  ot:dejs-soft:format
   :~  [%name so:dejs-soft:format]
-      [%age so:dejs-soft:format]
+      [%age no:dejs-soft:format]
   ==
 > (parser u:+:(de-json:html a))
 ```
 
-TODO fix per the above schema
+The `dejs-soft` library fails gracefully (as opposed to `dejs`).  It can parse, among others, the following types:
+
+- `da`:  UTC date
+- `ne`:  number as real
+- `ni`:  number as integer
+- `so`:  string as cord
+- `ul`:  null
+
+JSON parsing code often ends up rather involved; consider this example:
+
+```hoon
+
+```
 
 - [~timluc-miptev, “Call from Outside:  JSON & `chanel.js`”](https://github.com/timlucmiptev/gall-guide/blob/master/chanel.md)
 - [“Fetch JSON”](https://urbit.org/docs/userspace/threads/examples/get-json)
@@ -401,5 +391,9 @@ At this point, you've been drinking from the firehose and it may have hurt a lit
 
 Our objective for today was to start you thinking in terms of the data structures of idiomatic Hoon.  I want you to absorb as much of this as you can tonight and then tomorrow we will venture into the operating function, userspace, and software deployment, all of which you should be equipped to grapple with now.
 
+If you are interested in exploring some single-purpose generators, I suggest these:
+
+- [Matt Newport, `planetppm.hoon`](https://gist.github.com/mattnewport/f3eaa71c3f71cafe83da541cf3c052ae), a raytracer written in Hoon.
+- [N E Davis, `julia`](https://github.com/sigilante/julia), a fractal generator written in Hoon.
 
 {% include links.md %}

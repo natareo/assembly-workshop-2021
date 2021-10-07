@@ -32,10 +32,6 @@ Software developers in attendance at Assembly in Austin, Texas.  These all have 
 1. Those with little to no experience with software development in Hoon and on the Urbit platform.
 2. Those with Hoon School-tier exposure to the Hoon programming language.
 
-<!-- this is an html comment -->
-
-{% comment %} This is a comment in Liquid {% endcomment %}
-
 > ## Prerequisites
 >
 > We do not anticipate your knowing Hoon in advanced, although experience with

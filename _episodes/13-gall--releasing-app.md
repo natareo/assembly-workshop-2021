@@ -58,9 +58,67 @@ Broadly, speaking, desks look the same, except for some modest additions for age
 
 These new files contain critical information to instrument the distributed software:
 
-- `/sys/kelvin` for kernel Kelvin version, e.g. `[%zuse 420]`
-- `/desk/bill` for a list of agents to run (for `%kiln`)
-- `/desk/docket` for app metadata (for `%docket`)
+- `/sys/kelvin`:  kernel Kelvin version (required)
+
+    **base/sys.kelvin**:
+
+    ```hoon
+    [%zuse 420]
+    ```
+
+- `/desk/bill`:  a list of agents to run automatically (for `%kiln`) (optional)
+
+    **base/desk.bill**:
+
+    ```hoon
+    :~  %acme
+        %azimuth-tracker
+        %dbug
+        %dojo
+        %eth-watcher
+        %hood
+        %herm
+        %lens
+        %ping
+        %spider
+    ==
+    ```
+
+- `/desk/docket`:  app metadata (for `%docket`) (optional)
+
+    **base/sur/docket.hoon**:
+
+    ```hoon
+    +$  clause
+      $%  [%title title=@t]
+          [%info info=@t]
+          [%color color=@ux]
+          [%glob-http url=cord hash=@uvH]
+          [%glob-ames =ship hash=@uvH]
+          [%image =url]
+          [%site =path]
+          [%base base=term]
+          [%version =version]
+          [%website website=url]
+          [%license license=cord]
+      ==
+    ```
+
+    Example:
+
+    ```hoon
+    :~
+      title+'Delta'
+      info+'A distributed peer-to-peer poke demonstration app.'
+      color+0xcd.cdcd
+      glob-ames+[~zod 0v0]
+      image+'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Greek_uc_delta.svg/1200px-Greek_uc_delta.svg.png'
+      base+'delta'
+      version+[0 0 1]
+      license+'MIT'
+      website+'https://en.wikipedia.org/wiki/Delta_Force'
+    ==
+    ```
 
 To set this up, the first thing we need to do is create a new desk in `%clay` which will hold all of the relevant information about the app, including files and metadata.
 
@@ -104,5 +162,9 @@ An example `/desk/docket` file:
 
 ```hoon
 ```
+
+### References
+
+- [Tlon Corporation, “Distribution”](https://urbit.org/docs/userspace/dist)
 
 {% include links.md %}

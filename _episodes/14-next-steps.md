@@ -10,82 +10,68 @@ keypoints:
 - "The Urbit software distribution service affords a straightforward way to deploy, update, and remove `%gall` apps."
 ---
 
+##  What Else is There?
+
+We have had a whirlwind tour of developing basic `%gall` agents for Urbit.  We have necessarily had to leave out some important topics, including:
+
+1. Graph Store operations and data format
+2. Detailed JSON production and parsing
+3. Remote subscriptions and kicks
+4. Front-end development (à la Landscape)
+5. Composition of store/hook/view arrangement.
+6. Threading
+
+For a demonstration of several of these, I suggest you examine [`dcSpark/authenticate-with-urbit-id`](https://github.com/dcSpark/authenticate-with-urbit-id), which is a small agent that demonstrates parsing JSON input, subscribing to Graph Store, and some other simple elements of `%gall` agents.
+
+For a more complex single-purpose example including front-end development, you should examine [`yosoyubik/canvas`](https://github.com/yosoyubik/canvas), a peer-to-peer drawing app with a browser frontend and an Urbit backend.
+
+To learn more about threads, read about [Spider](https://urbit.org/docs/userspace/threads/overview) in the docs and examine `ted/example-fetch.hoon` in your own Urbit.  Threading is particular useful for handling complicated IO outside of an agent without compromising the agent's internal state.
+
 ##  Joining the Urbit Developer Community
 
 ### Contributing
 
-The Urbit ecosystem is primarily developed by Tlon Corporation and a host of open-source contributors.  The types of projects which you can contribute to include:
+The Urbit ecosystem is primarily developed by Tlon Corporation, a few companies (Urbit.Live, Tirrel, dcSpark, and some hosting companies), and an army of open-source contributors.  The types of projects which you can contribute to include:
 
-1. End-user applications (“userspace”, `%gall`) (this workshop)
+1. End-user applications (“userspace”, `%gall`)\
 2. Operating system functionality (Arvo & vanes)
 3. Runtime (king/serf, jets)
 
 As the Urbit developer community grows, there will be opportunities as well for various types of services, ranging from service hosts to star and galaxy owners.
 
-The Tlon [contributor's guide](https://github.com/urbit/urbit/blob/master/CONTRIBUTING.md) largely focuses on kernel contributor discipline, but provides a good framework for approaching development of any part of the ecosystem.
+The [Tlon contributor's guide](https://github.com/urbit/urbit/blob/master/CONTRIBUTING.md) largely focuses on kernel contributor discipline, but provides a good framework for approaching development of any part of the ecosystem.
 
 If you have not participated in an open-source project before, please check these resources as well:
 
-- [Gregory V. Wilson, “Joining a Project”](https://third-bit.com/2021/03/30/joining-a-project/)
-- TODO
-
-https://www.sebokwiki.org/wiki/Guide_to_the_Systems_Engineering_Body_of_Knowledge_(SEBoK)
-Most of my work here has been in the software engineering context. I usually recommend these books:
-
-11:33
-https://www.amazon.com/PSP-Self-Improvement-Software-Engineers-Engineering-ebook/dp/B001EWOG8A/ref=sr_1_fkmr1_1?ie=UTF8&qid=1542908000&sr=8-1-fkmr1&keywords=psa+self-improvement+process+for+software+engineers
-
-11:34
-https://www.amazon.com/Documenting-Software-Architectures-Views-Beyond/dp/0321552687/ref=sr_1_15?ie=UTF8&qid=1542908043&sr=8-15&keywords=software+architecture
-
-11:34
-And this book is good for getting the mindset
-
-11:34
-https://www.amazon.com/Winning-Software-Executive-Watts-Humphrey/dp/0201776391/ref=sr_1_3?ie=UTF8&qid=1542908074&sr=8-3&keywords=winning+with+software
-
-11:34
-Though perhaps a bit dated (most companies know they're in the software business in some capacity nowadays)
-
-http://third-bit.com/2017/08/01/msr-books.html://www.amazon.com/PSP-Self-Improvement-Software-Engineers-Engineering-ebook/dp/B001EWOG8A/ref=sr_1_fkmr1_1?ie=UTF8&qid=1542908000&sr=8-1-fkmr1&keywords=psa+self-improvement+process+for+software+engineers
-
-11:34
-https://www.amazon.com/Documenting-Software-Architectures-Views-Beyond/dp/0321552687/ref=sr_1_15?ie=UTF8&qid=1542908043&sr=8-15&keywords=software+architecture
-
-11:34
-And this book is good for getting the mindset
-
-11:34
-https://www.amazon.com/Winning-Software-Executive-Watts-Humphrey/dp/0201776391/ref=sr_1_3?ie=UTF8&qid=1542908074&sr=8-3&keywords=winning+with+software
-
-https://github.com/kamranahmedse/design-patterns-for-humans
-
-refactoring:  https://www.viva64.com/en/b/0391/
-https://landing.google.com/sre/book/index.html
-https://erikbern.com/2017/03/15/the-eigenvector-of-why-we-moved-from-language-x-to-language-y.html
-
-architecture:
-- http://pbat.ch/proj/voc/
-
-
-##  Resources
-
--   *Code Complete*
--   *The Pragmatic Programmer*
--   *Working with Legacy Code*
--   Gang of Four, *Design Patterns*
--   Scopatz & Huff, *Effective Computation in Physics*
-
+- [Gregory V. Wilson, “Joining a Project”](https://third-bit.com/2021/03/30/joining-a-project/) (good advice from my mentor)
+- [Zara Cooper, “Getting started with contributing to open source”](https://stackoverflow.blog/2020/08/03/getting-started-with-contributing-to-open-source/) (more generic advice from SO)
+- [Philip Monk `~wisdev-wicryt`, “Urbit Precepts”](https://urbit.org/blog/precepts) (the philosophy underlying Urbit's architectural decisions)
 
 ### Main Groups
 
-The community-facing groups which you can use to learn more about programming and developing in Urbit include:
+Some community-facing groups which you can use to learn more about programming and developing in Urbit include:
 
-- `~hiddev-dannut/new-hooniverse` (beginner-oriented)
-- `~littel-wolfur/the-forge` (general development)
-- `~dasfeb/smol-computers` (hardware)
+- `~hiddev-dannut/new-hooniverse` (Hooniverse, beginner-oriented)
+- `~littel-wolfur/the-forge` (The Forge, general development)
+- `~dasfeb/smol-computers` (Smol Computers, running on non-x86 hardware)
 - `~pindet-timmut/urbitcoin-cash` (BTC)
 
-### Urbit Foundation Scholarships
+### Urbit Foundation Opportunities
+
+The Urbit Foundation maintains an active developer outreach including:
+
+1. Bounties
+2. Apprenticeships
+3. Grants
+
+Talk to Josh Lehman `~wolref-podlex` for more information.
+
+### Resources
+
+-   [*The Architecture of Open-Source Applications*, vv. 1–2](https://aosabook.org/en/index.html)
+-   [*Code Complete*](https://www.oreilly.com/library/view/code-complete-second/0735619670/)
+-   [*The Pragmatic Programmer*](https://pragprog.com/titles/tpp20/the-pragmatic-programmer-20th-anniversary-edition/)
+-   [*Working with Legacy Code*](https://www.oreilly.com/library/view/working-effectively-with/0131177052/)
+-   [*Design Patterns for Humans*](https://github.com/kamranahmedse/design-patterns-for-humans)
 
 {% include links.md %}
