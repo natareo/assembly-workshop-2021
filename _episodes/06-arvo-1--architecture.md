@@ -53,24 +53,83 @@ Arvo events (`+$move`s) contain metadata and data.  Arvo recognizes three types 
 2.  `%give` events are returned values and move back along the calling duct.
 3.  `%unix` events communicate from Arvo to the underlying binary in such a way as to emit an external effect (an `%ames` network communication, for instance, or text input and output).
 
-TODO show structure of a card
-
 A bit more terminology:
 
-- A _move_ is a cause and action.
-- A _card_ is an event.  TODO beef this up
+- A _move_ consists of message data and metadata indicating what needs to happen.  A move sends an action to a location along a call stack (or _duct_).
+- A _card_ is an event, or action.  Cards can have arbitrarily complicated syntax depending on the vane and message.  For instance, here is an example of a Gall card:
 
-> Each vane defines a protocol for interacting with other vanes (via Arvo) by defining four types of cards: tasks, gifts, notes, and signs.
+    ```hoon
+    [%give %fact ~[/status] [%atom !>(status.state)]]
+    ```
+
+    There is a complicated interplay of cards as seen from callers and callees, but we will largely ignore that level of detail here.
+
+> ##  Card Types (Optional)
 >
-> In other words, there are only four ways of seeing a move:
-> 1. as a request seen by the caller, which is a `note`.
-> 2. that same request as seen by the callee, a `task`.
-> 3. the response to that first request as seen by the callee, a `gift`.
-> 4. the response to the first request as seen by the caller, a `sign`.
+> > Each vane defines a protocol for interacting with other vanes (via Arvo) by defining four types of cards: tasks, gifts, notes, and signs.
+> >
+> > In other words, there are only four ways of seeing a move:
+> > 1. as a request seen by the caller, which is a `note`.
+> > 2. that same request as seen by the callee, a `task`.
+> > 3. the response to that first request as seen by the callee, a `gift`.
+> > 4. the response to the first request as seen by the caller, a `sign`.
+{: .callout}
+
+To see how an event is processed in the Dojo, type `|verb` then `+ls %`.  After pressing `Enter`, you should see something like the following:
+
+```hoon
+["" %unix %belt /d/term/1 ~2021.10.8..21.29.25..aa8c]
+["|" %pass [%dill %g] [[%deal [~per ~per] %hood %poke] /] ~[//term/1]]
+["||" %give %gall [%unto %poke-ack] i=/dill t=~[//term/1]]
+["||" %give %gall [%unto %fact] i=/dill t=~[//term/1]]
+["|||" %give %dill %blit i=/gall/use/herm/0wHkGtE/~per/view/ t=~[/dill //term/1]]
+["|||" %give %dill %blit i=/gall/use/herm/0wHkGtE/~per/view/ t=~[/dill //term/1]]
+["||" %pass [%gall %g] [ [%deal [~per ~per] %dojo %poke]   /use/hood/0wHkGtE/out/~per/dojo/drum/phat/~per/dojo ] ~[/dill //term/1]]
+["|||" %give %gall [%unto %poke-ack] i=/gall/use/hood/0wHkGtE/out/~per/dojo/drum/phat/~per/dojo t=~[/dill //term/1]]
+["" %unix %belt /d/term/1 ~2021.10.8..21.29.26..2862]
+["|" %pass [%dill %g] [[%deal [~per ~per] %hood %poke] /] ~[//term/1]]
+["||" %give %gall [%unto %poke-ack] i=/dill t=~[//term/1]]
+["||" %give %gall [%unto %fact] i=/dill t=~[//term/1]]
+["|||" %give %dill %blit i=/gall/use/herm/0wHkGtE/~per/view/ t=~[/dill //term/1]]
+["|||" %give %dill %blit i=/gall/use/herm/0wHkGtE/~per/view/ t=~[/dill //term/1]]
+["||" %pass [%gall %g] [ [%deal [~per ~per] %dojo %poke]   /use/hood/0wHkGtE/out/~per/dojo/drum/phat/~per/dojo ] ~[/dill //term/1]]
+["|||" %give %gall [%unto %poke-ack] i=/gall/use/hood/0wHkGtE/out/~per/dojo/drum/phat/~per/dojo t=~[/dill //term/1]]
+["" %unix %belt /d/term/1 ~2021.10.8..21.29.26..f451]
+["|" %pass [%dill %g] [[%deal [~per ~per] %hood %poke] /] ~[//term/1]]
+["||" %give %gall [%unto %poke-ack] i=/dill t=~[//term/1]]
+["||" %give %gall [%unto %fact] i=/dill t=~[//term/1]]
+["|||" %give %dill %blit i=/gall/use/herm/0wHkGtE/~per/view/ t=~[/dill //term/1]]
+["|||" %give %dill %blit i=/gall/use/herm/0wHkGtE/~per/view/ t=~[/dill //term/1]]
+["||" %pass [%gall %g] [ [%deal [~per ~per] %dojo %poke]   /use/hood/0wHkGtE/out/~per/dojo/drum/phat/~per/dojo ] ~[/dill //term/1]]
+["|||" %give %gall [%unto %poke-ack] i=/gall/use/hood/0wHkGtE/out/~per/dojo/drum/phat/~per/dojo t=~[/dill //term/1]]
+["" %unix %belt /d/term/1 ~2021.10.8..21.29.28..448d]
+["|" %pass [%dill %g] [[%deal [~per ~per] %hood %poke] /] ~[//term/1]]
+["||" %give %gall [%unto %poke-ack] i=/dill t=~[//term/1]]
+[ "||" %pass [%gall %g] [ [%deal [~per ~per] %dojo %poke]   /use/hood/0wHkGtE/out/~per/dojo/drum/phat/~per/dojo ] ~[/dill //term/1]]
+[ "|||" %give %gall [%unto %poke-ack] i=/gall/use/hood/0wHkGtE/out/~per/dojo/drum/phat/~per/dojo t=~[/dill //term/1]]
+[ "|||" %give %gall [%unto %fact] i=/gall/use/hood/0wHkGtE/out/~per/dojo/drum/phat/~per/dojo t=~[/dill //term/1]]
+["||||" %give %gall [%unto %fact] i=/dill t=~[//term/1]]
+["|||||" %give %dill %blit i=/gall/use/herm/0wHkGtE/~per/view/ t=~[/dill //term/1]]
+["|||||" %give %dill %blit i=/gall/use/herm/0wHkGtE/~per/view/ t=~[/dill //term/1]]
+["|||||" %give %dill %blit i=/gall/use/herm/0wHkGtE/~per/view/ t=~[/dill //term/1]]
+["|||" %pass [%gall %c] [%warp /use/dojo/0wHkGtE/~per/drum_~per/hand/gen/ls] ~[/dill //term/1]]
+["||||" %give %clay %writ i=/gall/use/dojo/0wHkGtE/~per/drum_~per/hand/gen/ls t=~[/dill //term/1]]
+["|||||" %give %gall [%unto %fact] i=/gall/use/hood/0wHkGtE/out/~per/dojo/drum/phat/~per/dojo t=~[/dill //term/1]]
+["||||||" %give %gall [%unto %fact] i=/dill t=~[//term/1]]
+["|||||||" %give %dill %blit i=/gall/use/herm/0wHkGtE/~per/view/ t=~[/dill //term/1]]
+["|||||" %give %gall [%unto %fact] i=/gall/use/hood/0wHkGtE/out/~per/dojo/drum/phat/~per/dojo t=~[/dill //term/1]]
+["|||||" %give %gall [%unto %fact] i=/gall/use/hood/0wHkGtE/out/~per/dojo/drum/phat/~per/dojo t=~[/dill //term/1]]
+> +ls %
+app/ gen/ lib/ mar/ sur/ sys/ ted/ tests/
+```
+
+This involves Dill, Gall, and Clay.
 
 There is an excellent [“move trace” tutorial](https://urbit.org/docs/arvo/tutorials/move-trace) on Urbit.org which covers this in detail.  We don't need to deeply understand this terminology to understand that events are generated by vanes, dispatched by Arvo, and resolved by vanes.
 
 > An interrupted event never happened.  The computer is deterministic; an event is a transaction; the event log is a log of successful transactions. In a sense, replaying this log is not Turing complete. The log is an existence proof that every event within it terminates.
+
+- [Tlon Corporation, “Move Trace”](https://urbit.org/docs/arvo/tutorials/move-trace)
 
 ### Arvo as Standard Noun Structure
 
@@ -83,6 +142,6 @@ Arvo defines five standard arms for vanes and the binary runtime to use:
 
 Each arm possesses this same structure, which means that as the Urbit OS kernel grows and changes the main event dispatcher can remain the same.  For instance, when the build vane `%ford` was incorporated into `%clay`, no brain surgery was needed on Arvo to make this possible and legible.  Only the affected vanes (and any calls to `%ford`) needed to change.
 
-- [“Arvo tutorial”](https://urbit.org/docs/arvo/overview/)
+- [Tlon Corporation, “Arvo Tutorial”](https://urbit.org/docs/arvo/overview/)
 
 {% include links.md %}

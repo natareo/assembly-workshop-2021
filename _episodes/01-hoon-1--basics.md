@@ -99,7 +99,7 @@ Compare the verbal Hoon program side-by-side with the Python program.
 
 The terminology used in Urbit and Hoon is often unfamiliar.  Sometimes this means that you are dealing with a truly new concept (which would be obscured by overloading an older word like "subroutine" or "function"), whereas sometimes you are dealing with an internal aspect that doesn't really map well to other systems.  The strangeness can be frustrating.  The strangeness can make concepts fresh again.  You'll experience both sentiments during this workshop.
 
-Each rune accepts zero or more children.  Most runes accept a definite number of children, but a few can accept a variable number; these use `==` tistis or `--` hephep digraphs to indicate termination of the running series.
+Each rune accepts zero or more children.  Most runes accept a definite number of children, but a few can accept a variable number; these use `==` tistis or `--` hephep digraphs to indicate termination of the running series.  We separate adjacent children by `gap`s, or sequences of whitespace longer than a single space `ace`.
 
 Let's run this Fibonacci program in Urbit.  You will need to start a fakezod, at which point we have two options:
 

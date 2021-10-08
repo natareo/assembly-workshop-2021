@@ -19,7 +19,9 @@ title: "Instructor Notes"
 
 - Have students introduce themselves to each other at the beginning.
 
-- Encourage pair programming; consider _requiring_ it as the normative experience.
+- Encourage pair programming as the normative experience.
+
+- Have helpers keep you on track time-wise (with breaks etc.).
 
 - Use different color terminal windows for different sessions to help students visually distinguish.
 

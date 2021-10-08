@@ -127,6 +127,65 @@ marks
 % https://github.com/urbit/urbit/blob/master/pkg/arvo/sys/vane/gall.hoon#L1538
 % https://urbit.org/blog/ford-fusion/
 
+Now that you have seen a little more of how vanes work, take a gander at the `+ls` and `+cat` generators.  (These are the most complicated generators we'll see.)
+
+```hoon
+> +cat %/gen/ls/hoon
+/~per/home/~2021.10.8..19.11.55..0a8a/gen/ls/hoon
+::  LiSt directory subnodes
+::
+::::  /hoon/ls/gen
+  ::
+/?    310
+/+    show-dir
+::
+::::
+  ::
+~&  %
+:-  %say
+|=  [^ [arg=path ~] vane=?(%g %c)]
+=+  lon=.^(arch (cat 3 vane %y) arg)
+tang+[?~(dir.lon leaf+"~" (show-dir vane arg dir.lon))]~
+```
+
+```hoon
+> +cat %/gen/cat/hoon
+/~per/home/~2021.10.8..19.06.15..bc83/gen/cat/hoon
+::  ConCATenate file listings
+::
+::::  /hoon/cat/gen
+  ::
+/?    310
+/+    pretty-file, show-dir
+::
+::::
+  ::
+:-  %say
+|=  [^ [arg=(list path)] vane=?(%g %c)]
+=-  tang+(flop `tang`(zing -))
+%+  turn  arg
+|=  pax=path
+^-  tang
+=+  ark=.^(arch (cat 3 vane %y) pax)
+?^  fil.ark
+  ?:  =(%sched -:(flop pax))
+    [>.^((map @da cord) (cat 3 vane %x) pax)<]~
+  [leaf+(spud pax) (pretty-file .^(noun (cat 3 vane %x) pax))]
+?-     dir.ark                                          ::  handle ambiguity
+    ~
+  [rose+[" " `~]^~[leaf+"~" (smyt pax)]]~
+::
+    [[@t ~] ~ ~]
+  $(pax (welp pax /[p.n.dir.ark]))
+::
+    *
+  =-  [palm+[": " ``~]^-]~
+  :~  rose+[" " `~]^~[leaf+"*" (smyt pax)]
+      `tank`(show-dir vane pax dir.ark)
+  ==
+==
+```
+
 ### `++ford` , A Build System
 
 `++ford` builds code (either from the Dojo, from a library, from an app, etc.). `++ford` used to be a standalone vane [but was integrated into `%clay` in 2020](https://urbit.org/blog/ford-fusion/).

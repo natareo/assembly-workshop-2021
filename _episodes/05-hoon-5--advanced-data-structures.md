@@ -270,11 +270,12 @@ We have to build a parser to extract expected values (and ignore others).
 > =parser %-  ot:dejs-soft:format
   :~  [%name so:dejs-soft:format]
       [%age no:dejs-soft:format]
+      [%car (mu so):dejs-soft:format]  :: allows for unit result incl. null
   ==
 > (parser u:+:(de-json:html a))
 ```
 
-The `dejs-soft` library fails gracefully (as opposed to `dejs`).  It can parse, among others, the following types:
+The `dejs-soft` library fails gracefully (as opposed to `dejs`).  It can parse, among others, the following types.  (Wrap with `++mu` if the quantity is optional.)
 
 - `da`:  UTC date
 - `ne`:  number as real

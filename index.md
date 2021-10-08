@@ -4,7 +4,7 @@ root: .  # Is the only page that doesn't follow the pattern /:path/index.html
 permalink: index.html  # Is the only page that doesn't follow the pattern /:path/index.html
 ---
 
-#   Urbit for Developers
+#   Workshop Agenda
 ##  N E Davis (`~lagrev-nocfep`) · [Assembly 2021](http://assembly.urbit.org/)
 
 ![](https://pbs.twimg.com/media/E8c4z59WEAEWZ0a?format=jpg&name=medium)

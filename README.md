@@ -1,4 +1,4 @@
-#   Urbit for Developers
+#   Workshop Agenda
 ##  N E Davis (`~lagrev-nocfep`) · [Assembly 2021](http://assembly.urbit.org/)
 
 ![](https://pbs.twimg.com/media/E8c4z59WEAEWZ0a?format=jpg&name=medium)
