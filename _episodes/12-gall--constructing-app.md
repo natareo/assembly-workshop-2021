@@ -74,7 +74,7 @@ keypoints:
 >     --data '{"ship":"zod","action":"poke","app":"delta","json":"~nec","mark":"noun"}' \
 >     http://localhost:8080/~checkAuth
 >     ```
-{: .exercise}
+{: .challenge}
 
 > ## Secure Messages
 >

@@ -61,7 +61,7 @@ You'll see many of these employed in the Gall agents we compose tomorrow.
 > ## Libraries in Use
 >
 > Scan through the generators in `%/gen` and see which libraries are used and how they are imported.
-{: .exercise}
+{: .challenge}
 
 There are some notable omissions still which you can rectify for yourself:
 
@@ -77,7 +77,7 @@ Dogmatically good Hoon style has evolved over the years, and the current Arvo ke
 > ##  Deducing Style
 >
 > Examine several source code files.  Enumerate some principles of good Hoon style that you infer from these.
-{: .exercise}
+{: .challenge}
 
 Generally speaking, Hoon prefers short variable names with loose mnemonics, left-aligned rune branches, sparse commentary, and preference of whichever irregular form is most expressive in-context.
 

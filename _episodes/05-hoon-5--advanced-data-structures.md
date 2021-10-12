@@ -125,7 +125,7 @@ For each of the following, we assume the following set has been defined in Dojo:
     ```
     > (~(has by greek) %alpha)
     %.y
-    > (~(has by greek) %beta)
+    > (~(has by greek) %betta)
     %.n
     ```
 
@@ -283,29 +283,43 @@ The `dejs-soft` library fails gracefully (as opposed to `dejs`).  It can parse, 
 - `so`:  string as cord
 - `ul`:  null
 
-JSON parsing code often ends up rather involved; consider this example:
-
-```
-
-```
+JSON parsing code often ends up rather involved.
 
 - [~timluc-miptev, “Call from Outside:  JSON & `chanel.js`”](https://github.com/timlucmiptev/gall-guide/blob/master/chanel.md)
 - [“Fetch JSON”](https://urbit.org/docs/userspace/threads/examples/get-json)
 
 ### Randomness
 
-Random numbers
+We encountered random numbers previously when dealing with the six-sided dice problem.
 
 The entropy `eny` is generated from [`/dev/random`](https://en.wikipedia.org/wiki//dev/random), itself seeded by factors such as keyboard typing latency.
 
-For instance, to grab a particular entry at random from a dictionary, you can convert `eny` to a valid key and then retrieve:
+For instance, to grab a particular entry at random from a list, you can convert `eny` to a valid key and then retrieve:
 
 ```
-
+(snag (~(rad og eny) 5) (gulf 1 5))
+(snag (~(rad og eny) 5) `(list @p)`~[~wanzod ~marzod ~binzod ~litzod ~samzod])
 ```
 
-The `og` core
+The `og` core provides a number of methods:
 
+- `++rad` for random in range
+- `++raw` for random binary bits
+
+The main thing to keep in mind when using the RNG is that you must update the internal state.  Since Hoon is a functional programming language without side effects, you have to pin the modified state as the old state's name to continue to use it.
+
+```
+:-  %say
+|=  [[* eny=@uv *] [n=@ud ~] ~]
+  :-  %noun
+  =/  values  `(list @ud)`~
+  =/  count  0
+  =/  rng  ~(. og eny)
+  |-  ^-  (list @ud)
+    ?:  =(count n)  values
+    =^  r  rng  (rads:rng 100)
+  $(count +(count), values (weld values ~[(add r 1)]))
+```
 
 ### Time
 
@@ -314,13 +328,15 @@ Hoon supports a native date-time aura, `@da` (absolute, relative to “the begin
 There is also a parsed time format `tarp`
 
 ```
-[d=@ud h=@ud m=@ud s=@ud f=@ud]
+> *tarp
+[d=0 h=0 m=0 s=0 f=~]
 ```
 
 and a parsed date format `date`
 
 ```
-[[a=? y=@ud] m=@ud t=tarp]
+> *date
+[[a=%.y y=0] m=0 t=[d=0 h=0 m=0 s=0 f=~]]
 ```
 
 which are convenient for representations and interconversions.
@@ -360,7 +376,7 @@ Things can get much worse, too!
 .1.7014118e38
 ```
 
-Most aura types have a characteristic core that enables one to consistently work with their values.  For instance, for floating-point mathematics, one should use the `rs` core:
+Auras have a characteristic core that enables one to consistently work with their values.  For instance, for floating-point mathematics, one should use the `rs` core:
 
 ```
 > (add:rs .1 .1)

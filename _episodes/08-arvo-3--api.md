@@ -27,7 +27,47 @@ Other data are frequently stored off-ship, such as in an S3 bucket.
 
 ##  Filesystem Operations
 
-TODO
+Most of the filesystem operations are necessary because of coordination with Earth.  That is, one develops software and library code using a text editor or IDE, then needs to synchronize the Martian copy with the Earthling copy.  (While there have been a couple of `ed` clones produced, text editing on Mars is extremely primitive if it exists at all.)
+
+To produce a new `desk`, one must branch from a current desk:
+
+```
+|merge %new-desk our %base
+|mount %new-desk
+```
+
+You have seen `|mount` and `|commit` previously, but let's examine them in light of `desk`s:
+
+```
+:: Mount a desk to the Unix filesystem.
+|mount %landscape
+
+:: Commit changes from Unix to Mars.
+|commit %landscape
+```
+
+For convenience, you can catch formatted output in the Dojo using `*`:
+
+```
+*%/output/txt +julia 24
+```
+
+This produces a file `home/output.txt` (note that the suffix must be a valid mark).
+
+To run a generator on another desk besides `%base`, you can either change to that desk explicitly or invoke via the desk name.
+
+```
+=dir /=new-desk=
++new-generator
++new-desk!new-generator
+```
+
+> ## Julia Set Fractal Generator (Optional)
+>
+> Download the file [`julia.hoon`]() and paste its contents into a new `desk` named `fractals`.  Commit it and run it using `+fractals!julia +24`.  Redirect its output for a larger input (not more than 100) to a file on desk.
+>
+> ![](https://raw.githubusercontent.com/sigilante/julia/master/dragon1024-0.png)
+{: .challenge}
 
 - [Tlon Corporation, “Filesystem User's Manual”](https://urbit.org/using/os/filesystem)
 
@@ -64,8 +104,6 @@ The first letter of the second element (`@tas`) indicates the destination vane o
 Some examples:
 
 ```
-TODO one each for the scry types of %clay, %gall
-
 ::  Build a conversion mark from JSON to txt.
 .^(tube:clay %cc /~zod/home/1/json/txt)
 
@@ -74,6 +112,12 @@ TODO one each for the scry types of %clay, %gall
 
 ::  Ask for a file from several hours ago.
 .^(arch %cy /(scot %p our)/home/(scot %da (sub now ~h5)))
+
+::  Scry into graph-store for messages
+.^(noun %gx /=graph-store=/keys/noun)
+
+::  Scry into metadata-store for current state
+.^(noun %gx /=metadata-store=/export/noun)
 ```
 
 

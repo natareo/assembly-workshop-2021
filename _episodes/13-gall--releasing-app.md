@@ -27,13 +27,31 @@ Grid and `%docket` automate most of the process now for users.  Software distrib
 #### References
 
 - [`~rovnys-ricfer`, “Third-Party Software Distribution in Urbit”](https://gist.github.com/belisarius222/fe93df670b776ebd276f9bd0d42f0b12)
+- [Tlon Corporation, “Dojo Tools (for Distribution”)](https://urbit.org/docs/userspace/dist/tools)
 
 ##  Installing an App
 
-We will install a remote app onto our local ship at the command line (rather than via the browser UI).
+We can install a remote app onto our local ship at the command line (rather than via the browser UI).
 
-```hoon
-|install ~magbel %example
+```
+> |install ~paldev %pals
+>=
+ames: czar dev.urbit.org: ip .35.227.173.38
+; ~paldev is your neighbor
+kiln: activated install into %pals from [~paldev %pals]
+kiln: downloading update for %pals from [~paldev %pals]
+kiln: finished downloading update for %pals from [~paldev %pals]
+kiln: merging into %pals from [~paldev %pals]
+kiln: merge into %pals succeeded
+kiln: commit detected at %pals from [~paldev %pals]
+gall: installing %pals
+```
+
+This should automatically start any appropriate agents.  Check agent status per `desk`:
+
+```
+> +agents %pals
+status: running   %pals
 ```
 
 #### Resources
@@ -62,7 +80,7 @@ These new files contain critical information to instrument the distributed softw
 
     **base/sys.kelvin**:
 
-    ```hoon
+    ```
     [%zuse 420]
     ```
 
@@ -70,7 +88,7 @@ These new files contain critical information to instrument the distributed softw
 
     **base/desk.bill**:
 
-    ```hoon
+    ```
     :~  %acme
         %azimuth-tracker
         %dbug
@@ -88,7 +106,7 @@ These new files contain critical information to instrument the distributed softw
 
     **base/sur/docket.hoon**:
 
-    ```hoon
+    ```
     +$  clause
       $%  [%title title=@t]
           [%info info=@t]
@@ -106,7 +124,7 @@ These new files contain critical information to instrument the distributed softw
 
     Example:
 
-    ```hoon
+    ```
     :~
       title+'Delta'
       info+'A distributed peer-to-peer poke demonstration app.'
@@ -120,16 +138,24 @@ These new files contain critical information to instrument the distributed softw
     ==
     ```
 
-To set this up, the first thing we need to do is create a new desk in `%clay` which will hold all of the relevant information about the app, including files and metadata.
+### Setup
 
-```hoon
-|merge ~zod landscape
+To set this up, the first thing we need to do is create a new desk in `%clay` which will hold all of the relevant information about the app, including files and metadata.  Typically we base this on `our` `%base` desk:
+
+```
+|merge %new-desk ~sampel-palnet %base
+```
+
+Mount and commit the appropriate files.  Then make the new desk public:
+
+```
+|public %new-desk
 ```
 
 
 This is a `$docket` mark with annotation:
 
-```hoon
+```
 +$  href                                :: where a tile links
   $%  [%glob base=term =glob-location]  :: location of client-side data
       [%site =path]                     :: location of server-rendered frontend
@@ -156,11 +182,6 @@ This is a `$docket` mark with annotation:
       website=url                       :: URL to open on click
       license=cord                      :: software release license
   ==                                    ::
-```
-
-An example `/desk/docket` file:
-
-```hoon
 ```
 
 ### References

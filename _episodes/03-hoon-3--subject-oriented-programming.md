@@ -62,9 +62,9 @@ Hoon developers frequently talk about “limbs” of the subject.  Arms describe
 > > - 🍑 `42` or `->->-`
 > > - 🍊 `62` or `+>+>-`
 > > - 🍍 `87` or `->->+>`  # heuristic for these mathematically
-> > - 🍒 `126` or `+>+>+-`
+> > - 🍒 `126` or `+>+>+<`
 > {: .solution}
-{: .exercise}
+{: .challenge}
 
 - [“The Subject and its Legs”](https://urbit.org/docs/hoon/hoon-school/the-subject-and-its-legs)
 
@@ -338,6 +338,7 @@ This is part of the digit-to-cord display door:
 >   1
 > ]
 > ```
+{: .callout}
 
 
 ##  Molds
@@ -479,11 +480,9 @@ How do we leave things out?
 
 In Dojo, you can always produce the current time as an atom using `now`.  This is a Dojo convenience, however, and we need to bind `now` to a face if we want to use it inside of a generator.
 
-Time in Urbit will be covered in Zuse.
+There are also sophisticated representations broken out by value and as `@da` absolute/`@dr` relative types.
 
 ### Entropy
-
-![](repo:./img/07-header-apollo-2.png){: width=100%}
 
 What is _entropy_?  [Computer entropy](https://en.wikipedia.org/wiki/Entropy_%28computing%29) is a hardware or behavior-based collection of device-independent randomness.  For instance, "The Linux kernel generates entropy from keyboard timings, mouse movements, and IDE timings and makes the random character data available to other operating system processes through the special files `/dev/random` and `/dev/urandom`."
 
@@ -493,7 +492,7 @@ For instance, run `cat /dev/random` on a Linux box and observe the output.  You'
 
 ### Beak
 
->Paths begin with a piece of data called a `beak`. A beak is formally a `(p=ship q=desk r=case)`; it has three components, and might look like `/~dozbud-namsep/home/11`.
+> Paths begin with a piece of data called a `beak`. A beak is formally a `(p=ship q=desk r=case)`; it has three components, and might look like `/~dozbud-namsep/home/11`.
 
 You can get this information in Dojo by typing `%`.
 
@@ -549,11 +548,11 @@ Note that, in all of these cases, you are writing a gate `|=` bartis which accep
 
 > ##  Rolling Dice
 >
-> Write a \say~generator which simulates scoring a simple dice throw of $n$ six-sided dice.  That is, it should return the sum of $n$ dice as inputs.  You may reuse code from `mp0` or you may use entropy following the discussion in []().  If no number is specified, then only one die roll should be returned.
+> Write a `%say` generator which simulates scoring a simple dice throw of $n$ six-sided dice.  That is, it should return the sum of $n$ dice as inputs.  If no number is specified, then only one die roll should be returned.
 >
-> Since Hoon is functional but random number generators stateful, you should use the \ptisket~rune to replace the current value in the RNG.  \tisket~is a kind of "one-effect monad," which allows you to change a single part of the subject.
+> Since Hoon is functional but random number generators stateful, you should use the `=^` tisket rune to replace the current value in the RNG.  \tisket~is a kind of "one-effect monad," which allows you to change a single part of the subject.
 >
-> For instance, here is a generator that returns a list of _n_ probabilities between 0–100%.
+> For instance, here is a `%say` generator that returns a list of _n_ probabilities between 0–100%.
 >
 > ```
 > :-  %say
@@ -575,9 +574,7 @@ Note that, in all of these cases, you are writing a gate `|=` bartis which accep
 > ```
 >
 > (Note the comma separating optional arguments.)
->
-> - **Stretch goal**:  Modify this to reproduce the behavior of `n` 6-sided dice added together.
-{: .exercise}
+{: .challenge}
 
 > ## Prime Sieve
 >
@@ -663,7 +660,7 @@ Note that, in all of these cases, you are writing a gate `|=` bartis which accep
 >   $(c [(nick [j 0] c)], j (add j b))
 > --
 > ```
-{: .exercise}
+{: .challenge}
 
 > ## Documentation Examples
 >
@@ -674,9 +671,9 @@ Note that, in all of these cases, you are writing a gate `|=` bartis which accep
 > - Reading: [Tlon Corporation, "Hoon Workbook:  Digits"](https://urbit.org/docs/tutorials/hoon/workbook/digits/)
 > - Reading: [Tlon Corporation, "Hoon Workbook:  Magic 8-Ball"](https://urbit.org/docs/tutorials/hoon/workbook/eightball/)
 > - Reading: [Tlon Corporation, "Hoon Workbook:  Traffic Light"](https://urbit.org/docs/tutorials/hoon/workbook/traffic-light/)
-{: .exercise}
+{: .challenge}
 
-> ## `%ask` Generators (Optional Content)
+> ## `%ask` Generators (Optional)
 >
 > `%ask` generators assume some interactivity with the user.  They are less commonly encountered in Arvo since at this point many developers prefer to write whole `%gall` apps.
 >

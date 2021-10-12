@@ -390,8 +390,6 @@ For instance, `++trip` converts a cord to a tape; `++crip` does the opposite.
 > >   $(n (dec n), x $(n n, x x, y (dec y)), y (add y $(n n, x x, y (dec y))))
 > > ```
 > {: .solution}
-{: .callout}
-
-
+{: .challenge}
 
 {% include links.md %}

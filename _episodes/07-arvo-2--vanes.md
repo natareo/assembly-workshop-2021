@@ -120,7 +120,7 @@ Each mark has three arms:
 
 Besides `%clay`, the `%gall` userspace vane uses marks to validate and manipulate the data values being carried by pokes and scries.
 
-`path`s are resolved within a given `desk`, which is like a Git branch.  Until very recently this only mattered for OTA updates, in which your local `%home` `desk` received an update from your Azimuth sponsor's `%kids` `desk`.  Now, however, `desk`s have become the primary mode of software distribution.  We will revisit them as a practical matter much later today.
+`path`s are resolved within a given `desk`, which is like a Git branch.  Until very recently this only mattered for OTA updates, in which your local `%home` `desk` received an update from your Azimuth sponsor's `%kids` `desk`.  Now, however, `desk`s have become the primary mode of software distribution.  We will revisit them as a practical matter later today.
 
 Now that you have seen a little more of how vanes work, take a gander at the `+ls` and `+cat` generators.  (These are the most complicated generators we'll see.)
 
@@ -236,7 +236,7 @@ Importing with `*` removes the face (i.e. imports directly into the namespace), 
 > > --
 > > ```
 > {: .solution}
-{: .exercise}
+{: .challenge}
 
 ### `%dill` , A Terminal Driver
 

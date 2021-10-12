@@ -178,7 +178,7 @@ Most marks are straightforward or can be developed by glancing at others.
 >
 > - Examine `/sur/dns.hoon` (basic) or `/sur/bitcoin.hoon` (advanced).
 > - Examine `/mar/json.hoon`.
-{: .exercise}
+{: .challenge}
 
 > ## A Shell Script
 >
