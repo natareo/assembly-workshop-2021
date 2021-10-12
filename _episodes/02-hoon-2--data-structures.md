@@ -28,7 +28,7 @@ Atoms have tags called _auras_ which can be used coercively or noncoercively to 
 
 For instance, to a machine there is no fundamental difference between binary `0x11011001`, decimal `217`, and hexadecimal `0xD9`.  A human coder recognizes them as different encoding schemes and associates tacit information with each:  an assembler instruction, an integer value, a memory address.  Hoon offers two ways of designating values with auras:  either directly by the input formatting of the number (such as \texttt{0b1101.1001}) or using the irregular syntax ``@``:
 
-```hoon
+```
 0b1101.1001
 `@ud`0b1101.1001  :: yields 217
 `@ux`0b1101.1001  :: yields 0xd9
@@ -38,7 +38,7 @@ For instance, to a machine there is no fundamental difference between binary `0x
 >
 > Try the following auras.  See if you can figure out how each one is behaving.
 >
-> ```hoon
+> ```
 > `@ud`0x1001.1111
 > `@ub`0x1001.1111
 > `@ux`0x1001.1111
@@ -107,7 +107,7 @@ $$
 (a < b) \land ((b \geq c) \lor d)
 $$
 
-```hoon
+```
 &((lth a b) (|((gte b c) d)))
 ```
 
@@ -123,7 +123,7 @@ For instance, a list of characters (or `tape`, one of Hoon's string types) can b
 
 ![](./img/binary-tree-tape.png)
 
-```hoon
+```
 > +1:"hello"
 i="hello"
 > +2:"hello"
@@ -195,7 +195,7 @@ i='o'
 
 More common than direct numerical addressing (of either form), however, is _lark addressing_, which is a quirky but legible shorthand.  The head and tail of each cell are selected by alternating `+`/`-` and `<`/`>` pairs, which is readable once you know what you're looking at.
 
-```hoon
+```
 > =hello "hello"
 > -.hello
 i='h'
@@ -225,7 +225,7 @@ t=""
 
 Finally, the most general mold is \texttt{*} which simply matches any noun—and thus anything in Hoon at all.  The `*` applied to a value yields the _bunt_, or default empty definition.
 
-```hoon
+```
 > *@ud
 0
 > *@ux
@@ -246,7 +246,7 @@ Finally, the most general mold is \texttt{*} which simply matches any noun—and
 >
 > > `|=` bartis produces a _gate_ or function.  Every gate has the same shape, which means certain assumptions about data access and availability can be made.
 > >
-> > ```hoon
+> > ```
 > > ::  XOR two binary atoms
 > > |=  [a=@ub b=@ub]
 > > `@ub`(mix a b)
@@ -280,7 +280,7 @@ For instance, a list of characters (or `tape`, one of Hoon's string types) can b
 
 ![](./img/binary-tree-tape.png)
 
-```hoon
+```
 > +1:"hello"
 i="hello"
 > +2:"hello"
@@ -315,7 +315,7 @@ Lists have an additional way to grab an element:
 
 - Sequential entry, `&` lets you grab the _n_th item of a list:  `&1:~['one' 2 .3.0 .~4.0 ~.5]`
 
-```hoon
+```
 > &1:"hello"
 i='h'
 > &2:"hello"
@@ -334,7 +334,7 @@ In contrast to tapes, cords store the ASCII values in a single arbitrary integer
 
 (More properly, it's done in UTF-8:  here's Cherokee.)
 
-```hoon
+```
 > 'ᏣᎳᎩ'
 'ᏣᎳᎩ'
 > `@ux`'ᏣᎳᎩ'
@@ -348,7 +348,7 @@ Cords are useful as a compact primary storage and data transfer format, but freq
 
 For instance, `++trip` converts a cord to a tape; `++crip` does the opposite.
 
-```hoon
+```
 ++  trip
   |=  a=@  ^-  tape
   ?:  =(0 (met 3 a))  ~
@@ -357,7 +357,7 @@ For instance, `++trip` converts a cord to a tape; `++crip` does the opposite.
 
 `++met`, `++end`, and `++rsh` are bitwise manipulation gates.  Basically they chop up a cord into $2^3 = 8$-bit slices as the elements of a list.
 
-```hoon
+```
 ++  crip
   |=  a=tape  ^-  @t
   (rap 3 a)
@@ -382,7 +382,7 @@ For instance, `++trip` converts a cord to a tape; `++crip` does the opposite.
 > \end{array}
 > $$
 >
-> > ```hoon
+> > ```
 > > ++  sudan
 > >   |=  [n=@ud x=@ud y=@ud]  ^-  @ud
 > >   ?:  =(n 0)  (add x y)

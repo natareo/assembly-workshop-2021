@@ -6,6 +6,7 @@ questions:
 - "How do I access data locally?"
 - "How do I access data remotely?"
 objectives:
+- "Update and access the file system."
 - "Scry for local and remote data."
 - "Use subscriptions to access data."
 - "Enumerate functionality of the Urbit API."
@@ -16,7 +17,24 @@ keypoints:
 - "A subscription is a reactive request for data updates."
 ---
 
-The main data operations in Urbit are:  scries, pokes, and subscriptions.
+Data tend to live in one of two places in Urbit:
+
+1. `%clay` holds files (typically source files).
+2. `%gall` holds data stores (of all kinds:  metadata, data, etc.).
+
+Other data are frequently stored off-ship, such as in an S3 bucket.
+
+
+##  Filesystem Operations
+
+TODO
+
+- [Tlon Corporation, “Filesystem User's Manual”](https://urbit.org/using/os/filesystem)
+
+
+##  Userspace Operations
+
+The main data operations in Urbit userspace are:  scries, pokes, and subscriptions.
 
 - A scry is like an HTTP `GET` retrievel of data.
 - A poke is like an HTTP `PUT` request for data.
@@ -28,7 +46,7 @@ We've talked at some length about data access through scrying, but how does one 
 
 A `.^` dotket call accepts a type `p` for the result of the call and a compound `path` which indicates where the call goes and other information.
 
-```hoon
+```
 ::  Query %clay for a list of files at the current path.
 .^(arch %cy %)
 ```
@@ -45,7 +63,7 @@ The first letter of the second element (`@tas`) indicates the destination vane o
 
 Some examples:
 
-```hoon
+```
 TODO one each for the scry types of %clay, %gall
 
 ::  Build a conversion mark from JSON to txt.

@@ -19,7 +19,7 @@ We are going to widen our view a little bit as well with this agent:  we will no
 
 **`/app/bravo.hoon`**:
 
-```hoon
+```
 /-  bravo
 /+  default-agent, dbug
 |%
@@ -137,7 +137,7 @@ The structure file should accommodate the following actions:
 
 We will also accommodate external scrying into the agent through the `++on-peek` arm.  Once the above works correctly, you should add in an augmented `++on-peek` arm:
 
-```hoon
+```
 ++  on-peek
   |=  =path
   ^-  (unit (unit cage))
@@ -156,7 +156,7 @@ For this case, we only need to return data, so we will only support `%gx` scries
 
 Scry results are directly accessible via `.^` dotket operations at the Dojo prompt (and more generally to other agents).  However, scries can only be performed locally—there are no remote scries as a security mechanism.  Remote agent data must be formally requested via a poke and return.
 
-```hoon
+```
 .^((list @ux) %gx /=bravo=/hexes/noun)
 ```
 
@@ -170,7 +170,7 @@ Scry results are directly accessible via `.^` dotket operations at the Dojo prom
 >
 > These bear the following relationship to a simple atom:
 >
-> ```hoon
+> ```
 > > !>(1)
 > [#t/@ud q=1]
 > > (vase !>(1))

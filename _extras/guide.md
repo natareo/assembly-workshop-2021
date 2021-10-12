@@ -31,6 +31,8 @@ title: "Instructor Notes"
 
 - Take care of your voice.  Let the microphone amplify.  You have to last for 9+ hours!
 
+- Use questions:  https://www.polleverywhere.com/activities
+
 #### Resources
 
 - [Software Carpentry, “Teaching Tips”](https://software-carpentry.org/blog/2015/03/teaching-tips.html)

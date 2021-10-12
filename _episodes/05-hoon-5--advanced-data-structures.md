@@ -23,7 +23,7 @@ Every atom in Hoon is an unsigned integer, even if interpreted by an aura.  Aura
 
 Units mitigate the situation by acting as a type union of `~` (for no result) and a cell `[~ u=item]` containing the returned item (with face `u`).
 
-```hoon
+```
 ++  unit
   |$  [item]
   $@(~ [~ u=item])
@@ -37,7 +37,7 @@ Many compound data structures in Hoon are trees, maps, or sets.  Trees are the l
 
 In computer science, a set is like a mathematical set with single-membership of values.  A set is not ordered so the results may not be ordered or stored the same as the input.
 
-```hoon
+```
 > (sy ~[5 4 3 2 1])
 [n=5 l={} r={1 2 3 4}]
 > (sy ~[8 8 8 7 7 6 5 5 4 3 2 1])
@@ -52,13 +52,13 @@ To produce a set, you can either construct it manually from a list using `++sy`,
 
 For each of the following, we assume the following set has been defined in Dojo:
 
-```hoon
+```
 =my-set (sy ~['a' 'B' "sea" 4 .5])
 ```
 
 - Put a value in the set:
 
-    ```hoon
+    ```
     > (~(put in my-set) ~.6)
     [n=.7.6e-44 l=[n=.5 l={} r={}] r=[n=.9.2e-44 l={} r={[i='s' t="ea"] 'a' '\04'}]]
     ```
@@ -67,7 +67,7 @@ For each of the following, we assume the following set has been defined in Dojo:
 
 - Query if value is in set:
 
-    ```hoon
+    ```
     > (~(has in my-set) 'B')
     %.y
     > (~(has in my-set) 'b')
@@ -76,14 +76,14 @@ For each of the following, we assume the following set has been defined in Dojo:
 
 - Get size of set:
 
-    ```hoon
+    ```
     > ~(wyt in my-set)
     5
     ```
 
 - Apply gate to values:
 
-    ```hoon
+    ```
     :: strip auras from all elements in set
     > (~(run in my-set) |=(a=* a))
     {1.084.227.584 66 [115 101 97 0] 97 4}
@@ -91,7 +91,7 @@ For each of the following, we assume the following set has been defined in Dojo:
 
 - Convert to list:
 
-    ```hoon
+    ```
     > ~(tap in my-set)
     ~[.6e-45 .1.36e-43 [i='s' t="ea"] .9.2e-44 .5]
     ```
@@ -108,13 +108,13 @@ Map keys are commonly `@tas` words.
 
 For each of the following, we assume the following set has been defined in Dojo:
 
-```hoon
+```
 =greek (~(gas by *(map @tas @t)) ~[[%alpha 'α'] [%beta 'β'] [%gamma 'γ'] [%delta 'δ'] [%epsilon 'ε'] [%zeta 'ζ'] [%eta 'η'] [%theta 'θ'] [%iota 'ι'] [%kappa 'κ'] [%lambda 'λ'] [%mu 'μ'] [%nu 'ν'] [%xi 'ξ'] [%omicron 'ο'] [%pi 'π'] [%rho 'ρ'] [%sigma 'σ'] [%tau 'τ'] [%upsilon 'υ'] [%phi 'φ'] [%chi 'χ'] [%psi 'ψ'] [%omega 'ω']])
 ```
 
 - Put a value in the map:
 
-    ```hoon
+    ```
     (~(put by greek) %digamma 'ϝ')
     ```
 
@@ -122,7 +122,7 @@ For each of the following, we assume the following set has been defined in Dojo:
 
 - Query if value is in set:
 
-    ```hoon
+    ```
     > (~(has by greek) %alpha)
     %.y
     > (~(has by greek) %beta)
@@ -131,14 +131,14 @@ For each of the following, we assume the following set has been defined in Dojo:
 
 - Get size of set:
 
-    ```hoon
+    ```
     > ~(wyt by greek)
     24
     ```
 
 - Get value by key:
 
-    ```hoon
+    ```
     > (~(get by greek) %delta)
     [~ 'δ']
     ```
@@ -147,19 +147,19 @@ For each of the following, we assume the following set has been defined in Dojo:
 
 - Apply gate to values:
 
-    ```hoon
+    ```
     > (~(run by greek) |=(a=@t `@ud`a))
     ```
 
 - Get list of keys:
 
-    ```hoon
+    ```
     ~(key by greek)
     ```
 
 - Get list of values:
 
-    ```hoon
+    ```
     ~(val by greek)
     ```
 
@@ -167,7 +167,7 @@ For each of the following, we assume the following set has been defined in Dojo:
 
 - Convert to list of pairs:
 
-    ```hoon
+    ```
     ~(tap by greek)
     ```
 
@@ -181,13 +181,13 @@ Many aspects of Hoon, in particular the parser, have their own characteristic da
 >
 > - `jar` is a map of lists.
 >
->     ```hoon
+>     ```
 >     ++  jar  |$  [key value]  (map key (list value))
 >     ```
 >
 > - `jug` is a map of sets.
 >
->     ```hoon
+>     ```
 >     ++  jug  |$  [key value]  (map key (set value))
 >     ```
 {: .callout}
@@ -205,7 +205,7 @@ Most of the text parsing library is built to process Hoon itself, and a variety 
 
 Frequently, one receives plaintext data from some source (like an HTTP `PUT` request) and needs to convert it to a Hoon-compatible atom format.  Alternatively, one needs to convert from a raw Hoon atom into a text representation.  `++slaw` and `++scot` provide this functionality:
 
-```hoon
+```
 > (slaw %p '~dopzod')
 [~ 4.608]
 > (scot %p 1.000)
@@ -231,7 +231,7 @@ Hoon has built-in support for parsing and exporting JSON-styled data.  **THIS IS
 
 The foregoing example becomes in Hoon:
 
-```hoon
+```
 [~
   [%o p={
       [p='car'
@@ -254,7 +254,7 @@ Hoon parses JSON in two passes:  first, the JSON is converted in the raw to a ta
 
 The first part is relatively straightforward.  Given a `cord` (`@t`) of JSON data, parse it to a tagged `json` data structure:
 
-```hoon
+```
 > =a '{"name":"John", "age":30, "car":null}'
 > a
 '{"name":"John", "age":30, "car":null}'
@@ -266,7 +266,7 @@ JSON is a structured data type, however, so one cannot generically process it in
 
 We have to build a parser to extract expected values (and ignore others).
 
-```hoon
+```
 > =parser %-  ot:dejs-soft:format
   :~  [%name so:dejs-soft:format]
       [%age no:dejs-soft:format]
@@ -285,7 +285,7 @@ The `dejs-soft` library fails gracefully (as opposed to `dejs`).  It can parse, 
 
 JSON parsing code often ends up rather involved; consider this example:
 
-```hoon
+```
 
 ```
 
@@ -300,7 +300,7 @@ The entropy `eny` is generated from [`/dev/random`](https://en.wikipedia.org/wik
 
 For instance, to grab a particular entry at random from a dictionary, you can convert `eny` to a valid key and then retrieve:
 
-```hoon
+```
 
 ```
 
@@ -313,13 +313,13 @@ Hoon supports a native date-time aura, `@da` (absolute, relative to “the begin
 
 There is also a parsed time format `tarp`
 
-```hoon
+```
 [d=@ud h=@ud m=@ud s=@ud f=@ud]
 ```
 
 and a parsed date format `date`
 
-```hoon
+```
 [[a=? y=@ud] m=@ud t=tarp]
 ```
 
@@ -330,21 +330,21 @@ which are convenient for representations and interconversions.
 
 Since every value is at heart an unsigned decimal integer, there is a well-formed binary representation for each value.  This determines the way that the system treats text characters and floating-point values, for instance, and if not careful one can quickly run into absurdity:
 
-```hoon
+```
 > (add 1 .-1)
 3.212.836.865
 ```
 
 If we specify the aura, we get a glimpse into what is happening:
 
-```hoon
+```
 > `@rs`(add 1 .-1)
 .-1.0000001
 ```
 
 That is, there is a binary representation of `.-1` to which the value `1` has been added:
 
-```hoon
+```
 > `@ub`.-1
 0b1011.1111.1000.0000.0000.0000.0000.0000
 > `@ub`(add .-1 1)
@@ -353,7 +353,7 @@ That is, there is a binary representation of `.-1` to which the value `1` has be
 
 Things can get much worse, too!
 
-```hoon
+```
 > (add .1 .1)
 2.130.706.432
 > `@rs`(add .1 .1)
@@ -362,14 +362,14 @@ Things can get much worse, too!
 
 Most aura types have a characteristic core that enables one to consistently work with their values.  For instance, for floating-point mathematics, one should use the `rs` core:
 
-```hoon
+```
 > (add:rs .1 .1)
 .2
 ```
 
 To convert between numbers, don't do a simple aura cast, which won't have the desired effect most of the time:
 
-```hoon
+```
 > `@rs`1.000
 .1.401e-42
 > `@rs`0
@@ -378,7 +378,7 @@ To convert between numbers, don't do a simple aura cast, which won't have the de
 
 Instead, employ the correct conversion routine:
 
-```hoon
+```
 > (sun:rs 5)
 .5
 ```

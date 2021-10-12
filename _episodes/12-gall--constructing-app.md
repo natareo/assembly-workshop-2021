@@ -30,7 +30,7 @@ keypoints:
 >
 > - You can distinguish output lines visually using the `>`/`>>`/`>>>` syntax for `~&`:
 >
->     ```hoon
+>     ```
 >     ~&  >  "log"        :: blue (log)
 >     ~&  >>  "warning"   :: yellow (warning)
 >     ~&  >>>  "error"    :: red (error)
@@ -41,7 +41,7 @@ keypoints:
 >
 > - JSON objects can be parsed using `++de-json:html` and `++dejs`.  However, you need a parser for `++dejs` to work, and a parser requires a basic JSON schema.
 >
->     ```hoon
+>     ```
 >     ++  req-parser-req                  :: parser for PUT request
 >       %-  ot:dejs-soft:format
 >       :~  [%ship so:dejs-soft:format]   :: only bother extracting these

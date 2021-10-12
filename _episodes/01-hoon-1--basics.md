@@ -65,7 +65,7 @@ def fibonacci(n):
 
 This is a _targum_ of Hoon rephrased into English-like pseudocode.  (Very early on there was a standard version of Hoon not unlike this, although it's not been used for many years now.)
 
-```hoon
+```
 func  n=uint  {
   let  [i=0 p=0 q=1 r=(list uint)]
   do {
@@ -83,7 +83,7 @@ func  n=uint  {
 
 Compare the verbal Hoon program side-by-side with the Python program.
 
-```hoon
+```
 |=  n=@ud
 %-  flop
 =+  [i=0 p=0 q=1 r=*(list @ud)]
@@ -110,7 +110,7 @@ Let's run this Fibonacci program in Urbit.  You will need to start a fakezod, at
 
 To input this program directly into Dojo, we will use a shortcut to name this code; in Hoon-speak we say we give it a face.  You should copy and paste the program rather than typing it out:
 
-```hoon
+```
 =fib |=  n=@ud
 %-  flop
 =+  [i=0 p=0 q=1 r=*(list @ud)]
@@ -128,7 +128,7 @@ Notice that the Dojo parses your code for compatibility in real time.  This make
 
 Now whenever we want to run the gate, we can use a Lisp-like syntax to operate on a value:
 
-```hoon
+```
 (fib 15)
 ```
 
@@ -149,7 +149,7 @@ Note the different syntax.  In the first case, we have a face in the operating c
 
 Let us read the runes by charting out the children of each rune vertically:
 
-```hoon
+```
 |=
   n=@ud
   %-
@@ -194,7 +194,7 @@ If we start from the Fibonacci sequence gate, we can build a list of acceptable 
 2. Scan down, top to bottom, and see what needs to be altered or removed.
 3. Test by `|commit %home` then `+p1 10`
 
-```hoon
+```
 |=  n=@ud                   :: gate accepts a single @ud argument
 %-  roll  :_  add
 =+  [i=3 m=0 r=*(list @ud)]
@@ -217,13 +217,13 @@ If we start from the Fibonacci sequence gate, we can build a list of acceptable 
 
 Once you can put this together, the next step is to sum the values together.  Hoon is a functional language, which means that it prefers to express set operations.  In this case, `++roll` will help us.  Add this as the second line:
 
-```hoon
+```
 %-  roll  :_  add
 ```
 
 (As a standalone, `++roll` works like this:
 
-```hoon
+```
 (roll `(list @ud)`~[9 6 5 3] add)
 ```
 
@@ -237,19 +237,19 @@ Many runes in common currency are not written in their regular form (tall or wid
 
 For instance, `%-` is most frequently written using parentheses `()` which permits a Lisp-like calling syntax:
 
-```hoon
+```
 (add 1 2)
 ```
 
 is equivalent to
 
-```hoon
+```
 %-  add  [1 2]
 ```
 
 which in turn is also equivalent to
 
-```hoon
+```
 %-(add [1 2])
 ```
 
@@ -259,7 +259,7 @@ All three mode of expression are encountered in production code.  Developers bal
 >
 > Hoon parses to an abstract syntax tree (AST), which includes cleaning up all of the sugar syntax and non-primitive runes.  To see the AST of any given Hoon expression, use `!,` zapcom, against `*hoon`.
 >
-> ```hoon
+> ```
 > > !,(*hoon =/(n 4 +(n)))
 > [%tsfs p=term=%n q=[%sand p=%ud q=4] r=[%dtls p=[%wing p=~[%n]]]]
 > ```

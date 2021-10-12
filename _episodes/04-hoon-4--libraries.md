@@ -24,13 +24,13 @@ If you need more functionality than these, you can import a library using the Fo
 
 You can also directly build a file in Dojo with the thread `-build-file`; this is frequently more convenient for interactive testing.
 
-```hoon
+```
 =foo -build-file %/lib/foo/hoon
 ```
 
 At this point, most operations are first-class features of the Hoon subject.  For instance, to render a string with URL-compatible codes:
 
-```hoon
+```
 =mytape "Parallax_(Star_Trek:_Voyager)"
 (weld "https://en.wikipedia.org/wiki/" (en-urlt:html mytape))
 ```
@@ -39,7 +39,7 @@ At this point, most operations are first-class features of the Hoon subject.  Fo
 
 Check the contents of the `/lib` directory with the `+ls` generator:
 
-```hoon
+```
 > +ls %/lib
   agentio/hoon
   aqua-azimuth/hoon
@@ -50,7 +50,7 @@ Check the contents of the `/lib` directory with the `+ls` generator:
 
 View the contents of a file with the `+cat` generator:
 
-```hoon
+```
 > +cat %/lib/ethereum/hoon
 ```
 

@@ -19,7 +19,7 @@ https://urbit.org/docs/userspace/graph-store/sample-application-overview
 
 We need to examine all of the ways a `%gall` app can communicate with the outside world.  Recall that an agent has ten arms:
 
-```hoon
+```
 |_  =bowl:gall
 ++  on-init
 ++  on-save
@@ -36,7 +36,7 @@ We need to examine all of the ways a `%gall` app can communicate with the outsid
 
 Arvo alone interacts with several of these:
 
-```hoon
+```
 ++  on-init
 ++  on-save
 ++  on-load
@@ -71,7 +71,7 @@ Remote subscriptions are in common use.
 
 **`/app/charlie.hoon`**:
 
-```hoon
+```
 /-  charlie
 /+  default-agent, dbug
 |%

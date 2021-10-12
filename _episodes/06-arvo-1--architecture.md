@@ -36,6 +36,10 @@ We could do worse than to start our exploration of the Urbit kernel than to quot
 
 Arvo is the main lifecycle function which handles these discrete events.  What initiates and handles events?  These are the _vanes_, standardized system services.  Every vane defines its own structured events (`+$move`s).  Each unique kind of structured event has a unique, frequently whimsical, name.  This can make it challenging to get used to how a particular vane behaves.
 
+![](https://pbs.twimg.com/media/FBgvOeNXsKEcp_1?format=jpg&name=large)
+
+We focus now on the center of this diagram.  The circle in the middle represents the Nock VM function.  Wrapping around that, the Arvo subject consists of the Arvo lifecycle function, the Hoon language, and the Zuse/Lull data structures and conventions.
+
 Arvo is essentially an event handler which can coordinate and dispatch messages between vanes as well as emit Unix `%unix` events (side effects) to the underlying (presumed Unix-compatible) host OS.  Arvo as hosted OS does not carry out any tasks specific to the machine hardware, such as memory allocation, system thread management, and hardware- or firmware-level operations.  These are left to the _king_ and _serf_, the daemon runtime processes which together run Arvo.
 
 Arvo is architected as a state machine, the deterministic end result of the event log.  We need to briefly examine Arvo from two separate angles:
@@ -58,7 +62,7 @@ A bit more terminology:
 - A _move_ consists of message data and metadata indicating what needs to happen.  A move sends an action to a location along a call stack (or _duct_).
 - A _card_ is an event, or action.  Cards can have arbitrarily complicated syntax depending on the vane and message.  For instance, here is an example of a Gall card:
 
-    ```hoon
+    ```
     [%give %fact ~[/status] [%atom !>(status.state)]]
     ```
 
@@ -77,7 +81,7 @@ A bit more terminology:
 
 To see how an event is processed in the Dojo, type `|verb` then `+ls %`.  After pressing `Enter`, you should see something like the following:
 
-```hoon
+```
 ["" %unix %belt /d/term/1 ~2021.10.8..21.29.25..aa8c]
 ["|" %pass [%dill %g] [[%deal [~per ~per] %hood %poke] /] ~[//term/1]]
 ["||" %give %gall [%unto %poke-ack] i=/dill t=~[//term/1]]

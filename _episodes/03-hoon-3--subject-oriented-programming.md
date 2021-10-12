@@ -92,7 +92,7 @@ Altogether, this yields a rich introspective framework for accessing and manipul
 >
 > In any programming paradigm, good names are valuable and collisions are likely.  In Hoon, if you need to catch an outer-context label that has the same name as an inner-context value, use `^` ket to skip the depth-first match.
 >
-> ```hoon
+> ```
 > ^^json
 > ```
 {: .callout}
@@ -131,7 +131,7 @@ The [trap](https://urbit.org/docs/glossary/trap) creates the basic looping mecha
 
 In practice, traps are used almost exclusively as recursion points, much like loops in an imperative language.  For instance, the following program counts from 5 down to 1, emitting output via `~&` sigpam at each iteration, then return `~` sig.
 
-```hoon
+```
 =/  count  5
 |-
   ?:  =(count 0)  ~
@@ -152,7 +152,7 @@ When you invoke a gate using `%-` cenhep (what is the irregular form?), the `$` 
 
 Gates—and other cores—have a standard structure, which renders them valid objects of introspection.  Indeed, Lisp-style brain surgery on cores is not uncommon, although we will by and large not need it in this workshop.
 
-```hoon
+```
 $:add
 $:mul
 $:arch
@@ -160,7 +160,7 @@ $:arch
 
 A trap isn't the only way to recurse in Hoon.  In fact, one sees the default `$` buc arm invoked directly in many cases to recalculate an entire gate recursively.  Consider, for instance, this implementation of the factorial:
 
-```hoon
+```
 |=  n=@ud
 ?:  =(n 1)
   1
@@ -171,7 +171,7 @@ In this case, the `$` buc arm is directly invoked in the `++mul` itself.  When t
 
 That is, when one reads this program, one reads it falling into two components:
 
-```hoon
+```
 |=  n=@ud             :: accept a single value n for n!
 ?:  =(n 1)  1         :: check n ≟ 1; if so, return 1
 (mul n $(n (dec n)))  :: multiply n times the product of this arm w/ n-1
@@ -187,7 +187,7 @@ When using a gate, the calling convention replaces the `sample` then pulls the `
 
 For instance, the random number generator uses the system entropy `eny` to produce a random number in the range 1–100:
 
-```hoon
+```
 (~(rad og eny) 1.000)
 ```
 
@@ -195,7 +195,7 @@ To build a door, use the `|_` barcab rune to produce a core with multiple arms (
 
 This is part of the digit-to-cord display door:
 
-```hoon
+```
 ++  ne
   |_  tig=@
   ++  d  (add tig '0')
@@ -207,7 +207,7 @@ This is part of the digit-to-cord display door:
 
 `++ne` is used as follows:
 
-```hoon
+```
 `@t`~(d ne 7)   :: decimal digit as cord
 `@t`~(x ne 14)  :: hexadecimal digit as cord
 `@t`~(v ne 25)  :: base-32 digit as cord
@@ -223,7 +223,7 @@ This is part of the digit-to-cord display door:
 >
 > Since `.` dot refers to the subject, this yields the ability to manipulate the sample without calling any arm directly.  The following examples illustrate:
 >
-> ```hoon
+> ```
 > (add [1 5])               :: call a gate
 > 6
 > ~($ add [1 5])            :: call the $ arm in the door
@@ -295,7 +295,7 @@ This is part of the digit-to-cord display door:
 > $(total (add total (lent metal)), count +(count))
 > ```
 >
-> ```hoon
+> ```
 > !=  |=  [metals=(list tape)]  =/  count  0  =/  total  0  |-  ?:  =(count (lent metals))  total  =/  metal  `tape`(snag count metals)  $(total (add total (lent metal)), count +(count))
 > [ 8
 >   [1 0]
@@ -352,13 +352,13 @@ The aura is a particular example of a _mold_, the type enforcement mechanism in 
 
 To illustrate these, we consider several ways to define a vehicle.  In the first, we employ only `+$` lusbuc to capture key vehicle characteristics.  Using only lusbuc, it's hard to say much of interest:
 
-```hoon
+```
 +$  vehicle  tape               :: vehicle identification number
 ```
 
 By permitting collections of named type values with `$%` buccen, we can produce more complicated structures:
 
-```hoon
+```
 +$  vehicle
   $%  vin=tape                  :: vehicle identification number
       owner=tape                :: car owner's name
@@ -368,7 +368,7 @@ By permitting collections of named type values with `$%` buccen, we can produce 
 
 Type definition arms can rely on other type definition arms available in the subject:
 
-```hoon
+```
 +$  vehicle
   $%  vin=tape                  :: vehicle identification number
       owner=tape                :: car owner's name
@@ -389,7 +389,7 @@ Type definition arms can rely on other type definition arms available in the sub
 
 Finally, by introducing unions with `$?` bucwut, a type definition arm can validate possible values:
 
-```hoon
+```
 +$  vehicle
   $%  vin=tape                  :: vehicle identification number
       owner=tape                :: car owner's name
@@ -416,11 +416,11 @@ Generators are standalone Hoon expressions that evaluate and may produce side ef
 
 To run a generator on a ship, prefix its name with `+` lus.  Arguments may be required or optional.
 
-```hoon
+```
 +trouble
 ```
 
-```hoon
+```
 :: Only for a real ship.
 +moon
 +moon ~rinset-lapter-sampel-palnet
@@ -440,7 +440,7 @@ More interesting for most cases are `%say` generators, which can include more in
 
 A basic `%say` generator looks like this:
 
-```hoon
+```
 :-  %say
 |=  *
 :-  %noun
@@ -507,14 +507,14 @@ You see a similar pattern in languages like Python, which permits (required) unn
 
 By "unnamed" arguments, we really mean _required_ arguments; that is, arguments without defaults.  We stub out information we don't want with the empty noun `*`:
 
-```hoon
+```
 |=  [* [a=@ud b=@ud c=@ud ~] ~]
 (add (mul a b) c)
 ```
 
 (You can use this in Dojo as well:
 
-```hoon
+```
 =f |=  [* [a=@ud b=@ud c=@ud ~] ~]
 (add (mul a b) c)
 (f [* ~[1 2 3] ~])
@@ -528,14 +528,14 @@ Note that we retain the terminating `~` since the expected sample is a list.
 
 We can incorporate optional arguments although without default values (i.e., the default value is always type-appropriate `~`).
 
-```hoon
+```
 |=  [* ~ [val=@ud ~]]
 (add val 2)
 ```
 
 To use it (saved as `gen/gate.hoon` and `|commit`ed):
 
-```hoon
+```
 +g =val 4
 ```
 
@@ -555,7 +555,7 @@ Note that, in all of these cases, you are writing a gate `|=` bartis which accep
 >
 > For instance, here is a generator that returns a list of _n_ probabilities between 0–100%.
 >
-> ```hoon
+> ```
 > :-  %say
 > |=  [[* eny=@uv *] [n=@ud ~] ~]
 >   :-  %noun
@@ -570,7 +570,7 @@ Note that, in all of these cases, you are writing a gate `|=` bartis which accep
 >
 > Your command to run this generator in the Dojo should look like this:
 >
-> ```hoon
+> ```
 > +dicethrow, =n 5
 > ```
 >
@@ -583,7 +583,7 @@ Note that, in all of these cases, you are writing a gate `|=` bartis which accep
 >
 > The Sieve of Eratosthenes is a classic (if relatively inefficient) way to produce a list of prime numbers.  Save this as a file `gen/primes.hoon`, sync it, and run it as `+primes 100`.  (Be careful not to use too large a number—use `Ctrl`+`C` to interrupt evaluation!)
 >
-> ```hoon
+> ```
 > :-  %say
 > |=  [[* eny=@uv *] [n=@ud ~] ~]
 > :-  %noun
@@ -682,7 +682,7 @@ Note that, in all of these cases, you are writing a gate `|=` bartis which accep
 >
 > For instance, here is the generator to retrieve your `+code` for web login.  (At this point, focus on the _structure_ not the _content_ of this generator.)
 >
-> ```hoon
+> ```
 > ::  Helm: query or reset login code for web
 > ::
 > ::::  /hoon/code/hood/gen

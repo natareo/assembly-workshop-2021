@@ -29,7 +29,7 @@ Before we do anything substantial with `%gall`, however, we are simply going to 
 
 **`/app/alfa.hoon`**
 
-```hoon
+```
 /-  alfa
 /+  default-agent, dbug
 |%
@@ -110,17 +110,34 @@ cp -r src/gall-alfa/* zod/home
 
 (We'll use a shell script introduced a bit later on to assist with this.)
 
+Until a couple of weeks ago, the syntax to start a `%gall` agent was `|start`.  As of Grid's release, this has switched to `|rein`.  Run this by itself to see what it expects as input arguments:
+
+```
+dojo> |rein
+>   dojo: nest-need
+[ [now=@da eny=@uvJ bec=[p=@p q=@tas r=?([%da p=@da] [%tas p=@tas] [%ud p=@ud])]]
+  [desk=@tas arg=it([?(%.y %.n) @tas])]
+  liv=?(%.y %.n)
+]
+>   dojo: nest-have
+[ [now=@da eny=@uvJ bec=[p=@p q=@tas r=?([%da p=@da] [%tas p=@tas] [%ud p=@ud])]]
+  %~
+  liv=?(%.y %.n)
+]
+```
+
 Run the following:
 
-```hoon
-|start %alfa
+```
+|rein %bitcoin [& %btc-provider]
+|rein %echo [& alfa]
 :alfa &alfa-action append-value+0xdead.beef
 :alfa %print-state
 ```
 
 At each point, you can check the internal state using the `debug` subject wrapper:
 
-```hoon
+```
 :alfa +dbug
 ```
 
@@ -130,7 +147,7 @@ The shared structure defines common molds like actions and expected structural d
 
 **`/sur/alfa.hoon`**
 
-```hoon
+```
 |%
 +$  action
   $%  [%append-value value=@ux]
@@ -142,7 +159,7 @@ Most marks are straightforward or can be developed by glancing at others.
 
 **`/mar/alfa/action.hoon`**
 
-```hoon
+```
 /-  alfa
 |_  =action:alfa
 ++  grab
@@ -193,7 +210,7 @@ Every Gall agent is a door with two components in its subject:
 
 The `bowl` is a collection of information which renders the agent legible to Arvo, such as providing the subscriptions:
 
-```hoon
+```
 ++  bowl              ::  standard app state
   $:  $:  our=ship    ::  host
           src=ship    ::  guest
@@ -211,13 +228,13 @@ The `bowl` is a collection of information which renders the agent legible to Arv
 
 For instance, the incoming subscriptions are a map from the `duct` (or `(list path)`) to a particular path on a particular ship.
 
-```hoon
+```
 +$  bitt  (map duct (pair ship path))
 ```
 
 The `duct` is the main construct for tracking information.  (Think back to our discussion of scrying:  this is the same concept in new clothes.)  The `path` or `wire` (same thing) bears a characteristic structure for each vane.  For instance, a directory listing from `%clay` is a simple path into `/c` with a tag `y` indicating the type of request:
 
-```hoon
+```
 > `path`[%cy /===/sys/vane]
 /cy/~sev/home/~2021.9.17..17.14.19..3635/sys/vane
 > `(list @t)`[%cy /===/sys/vane]
@@ -232,7 +249,7 @@ The `duct` is the main construct for tracking information.  (Think back to our d
 
 A `%gall` `path` could look like this:
 
-```hoon
+```
 > `path`[%gx /=settings-store=/has-entry/urbit-agent-permissions/'http://localhost:3000'/noun]
 ```
 
