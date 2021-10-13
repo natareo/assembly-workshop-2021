@@ -34,6 +34,7 @@ keypoints:
 >     ~&  >  "log"        :: blue (log)
 >     ~&  >>  "warning"   :: yellow (warning)
 >     ~&  >>>  "error"    :: red (error)
+>     ```
 >
 > - You should store the sending ship and counter as a `map`.  Use the `++by` door to work with `map`s.
 >
