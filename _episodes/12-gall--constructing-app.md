@@ -21,7 +21,7 @@ keypoints:
 > 3. Upon receipt of a decrement request, decrement the corresponding counter.
 > 4. In either case, print the resulting value on the local ship and send a poke to the remote ship to make it print the result as well.
 >
-> > ### Notes
+> > ##  Hints
 > >
 > > - While it is possible to set up a remote Urbit testnet, for our purposes it is simpler to test the agent using two (or more) fakezods on a single computer.  (You can also use several comets on the live network.)
 > >
