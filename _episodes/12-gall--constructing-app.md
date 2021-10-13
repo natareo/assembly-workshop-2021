@@ -14,7 +14,7 @@ keypoints:
 >
 > _This entire section is a team exercise.  You should work in a GitHub repository to which you all have access and employ basic pair programming to talk through your solution process._
 >
-> Your team's objective is to update the `%charlie` agent to a new `%delta agent`, which does the following:
+> Your team's objective is to update the `%charlie` agent to a new `%delta` agent, which does the following:
 >
 > 1. Accept remote pokes from another ship.  Pokes should be either increment or decrement requests.
 > 2. Upon receipt of an increment request, increment a count in a map of `@p`→`@ud` for each ship.  Add the key if necessary.

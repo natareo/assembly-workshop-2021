@@ -16,7 +16,10 @@ title: Setup
 
 ##  Handouts
 
-TODO as PDF here
+- [25 Key Runes](./handouts/handout-25-runes.pdf)
+- [Hooncard](./handouts/hooncard-assembly.pdf)
+- [Gall Handout](./handouts/gall-handout.pdf)
+- [Debugging Handout](./handouts/handout-debugging.pdf)
 
 
 ##  Prolegomena
