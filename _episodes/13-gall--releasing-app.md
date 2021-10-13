@@ -47,6 +47,8 @@ kiln: commit detected at %pals from [~paldev %pals]
 gall: installing %pals
 ```
 
+(Or try `|install ~paldev %picture` or `|install ~dister-dotnet-ritpub-sipsyl %urchatfm` for other examples.)
+
 This should automatically start any appropriate agents.  Check agent status per `desk`:
 
 ```

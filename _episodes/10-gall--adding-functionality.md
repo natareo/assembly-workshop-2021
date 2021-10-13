@@ -135,6 +135,11 @@ The structure file should accommodate the following actions:
 - `%push` (equivalent in effect to the old `%append-value`), `[%push value=@ux]`
 - `%pop` (will remove the most recent item from the list and return it), `[%pop ~]`
 
+```
+:bravo &bravo-action push+0xacdc
+:bravo &bravo-action pop+~
+```
+
 We will also accommodate external scrying into the agent through the `++on-peek` arm.  Once the above works correctly, you should add in an augmented `++on-peek` arm:
 
 ```

@@ -126,20 +126,48 @@ dojo> |rein
 ]
 ```
 
-Run the following:
+We need to do the following in order to have our development desk for the rest of the workshop:
 
-```
-|rein %bitcoin [& %btc-provider]
-|rein %echo [& alfa]
-:alfa &alfa-action append-value+0xdead.beef
-:alfa %print-state
-```
+1. Create a new desk for development.
 
-At each point, you can check the internal state using the `debug` subject wrapper:
+    ```
+    |merge %echo our %base
+    ```
 
-```
-:alfa +dbug
-```
+2. Mount the desk.
+
+    ```
+    |mount %echo
+    ```
+
+3. Create the `/app/alfa.hoon`, `/sur/alfa.hoon`, and `/mar/alfa/action.hoon` files (below).
+
+4. Install the desk (without a `%docket` file).
+
+    ```
+    |install our %echo
+    ```
+
+5. Start the agent on the desk.
+
+    ```
+    |rein %echo [& %alfa]
+    ```
+
+6. Interact with the agent.
+
+    ```
+    :alfa &alfa-action append-value+0xdead.beef
+    :alfa %print-state
+    ```
+
+    (We distinguish two ways of directly poking an agent.  Note that the `++on-poke` arm expects `[=mark =vase]`.  If we poke with a bare `@tas` then the mark is implicitly `%noun`.  Otherwise, we specify a mark with `&` then the required data, which gets wrapped in a `vase`.)
+
+7. At any point, you can check the internal state using the `debug` subject wrapper:
+
+    ```
+    :alfa +dbug
+    ```
 
 Any nontrivial app needs to define some shared files, which is one of the reasons this is an elephant.  In particular, a shared structure in `/sur` and a mark in `/mar` are required to handle data transactions.
 

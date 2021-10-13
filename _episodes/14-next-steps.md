@@ -15,13 +15,14 @@ keypoints:
 We have had a whirlwind tour of developing basic `%gall` agents for Urbit.  We have necessarily had to leave out some important topics, including:
 
 1. Graph Store operations and data format
-2. Detailed JSON production and parsing
-3. Remote subscriptions and kicks
-4. Front-end development (à la Landscape)
-5. Composition of store/hook/view arrangement.
-6. Threading
+2. Endpoint operations using `%eyre`
+3. Detailed JSON production and parsing
+4. Remote subscriptions and kicks
+5. Front-end development (à la Landscape)
+6. Threading for transient data requests
+7. Composition of store/hook/view arrangement
 
-For a demonstration of several of these, I suggest you examine [`dcSpark/authenticate-with-urbit-id`](https://github.com/dcSpark/authenticate-with-urbit-id), which is a small agent that demonstrates parsing JSON input, subscribing to Graph Store, and some other simple elements of `%gall` agents.
+For a demonstration of a few of these, I suggest you examine [`dcSpark/authenticate-with-urbit-id`](https://github.com/dcSpark/authenticate-with-urbit-id), which is a small agent that demonstrates parsing JSON input, subscribing to Graph Store, and some other simple elements of `%gall` agents.
 
 For a more complex single-purpose example including front-end development, you should examine [`yosoyubik/canvas`](https://github.com/yosoyubik/canvas), a peer-to-peer drawing app with a browser frontend and an Urbit backend.
 

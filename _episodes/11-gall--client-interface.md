@@ -67,7 +67,7 @@ Remote subscriptions are in common use.
 
 ###  The agent
 
-`%charlie` is yet another upgrade of `%bravo` which allows remote ships to poke each other and push hex values to or pop hex values from each others' `hexes`:
+`%charlie` is yet another upgrade of `%bravo` which allows remote ships to poke each other peer-to-peer and push hex values to or pop hex values from each others' `hexes`:
 
 **`/app/charlie.hoon`**:
 
@@ -111,7 +111,20 @@ Remote subscriptions are in common use.
     ?+    q.vase  (on-poke:default mark vase)
         %print-state
       ~&  >>  state
-      ~&  >>>  bowl  `this
+      ~&  >>>  bowl
+      `this
+      ::
+        [%push-local @ux]
+      ~&  >  "got poked from {<src.bowl>} with val: {<+.q.vase>}"
+      =^  cards  state
+      (handle-action:main !<(action:charlie vase))
+      [cards this]
+      ::
+        [%pop-local ~]
+      ~&  >  "got poked from {<src.bowl>} with val: {<+.q.vase>}"
+      =^  cards  state
+      (handle-action:main !<(action:charlie vase))
+      [cards this]
     ==
     ::
       %charlie-action
@@ -135,17 +148,25 @@ Remote subscriptions are in common use.
 --
 |_  =bowl:gall
 ++  handle-action
-  |=  =action:bravo
+  |=  =action:charlie
   ^-  (quip card _state)
   ?-    -.action
     ::
-      %push
+      %push-remote
+    :_  state
+    ~[[%pass /poke-wire %agent [target.action %charlie] %poke %noun !>([%push-local value.action])]]
+    ::
+      %push-local
     =.  hexes.state  (weld hexes.state ~[value.action])
     ~&  >>  hexes.state
     :_  state
     ~[[%give %fact ~[/hexes] [%atom !>(hexes.state)]]]
     ::
-      %pop
+      %pop-remote
+    :_  state
+    ~[[%pass /poke-wire %agent [target.action %charlie] %poke %noun !>(~[%pop-local])]]
+    ::
+      %pop-local
     =.  hexes.state  (snip hexes.state)
     ~&  >>  hexes.state
     :_  state
@@ -154,14 +175,50 @@ Remote subscriptions are in common use.
 --
 ```
 
-TODO
+At this point, if you are running a fakezod then the fakezods must be able to see each other over the local network.  Typically this means running two different fakezods on the same host machine.  Alternatively, you can spin up a comet or moon and do this with your teammates.  **We have no filtering for agent permissions here.**  This will be critical for real-world deployments.
 
-https://github.com/urbit/docs/pull/892/files
-https://urbit.org/docs/userspace/graph-store/sample-application-overview
+A `%charlie` agent needs to know how to do two things:  receive a push (with data) and receive a pop (here, functionally, a delete rather than a return).
 
-- [“External API Reference”](https://urbit.org/docs/arvo/eyre/external-api-ref)
+**`/sur/charlie.hoon`**
 
-> ##  Permissions on Mars (Optional)
+```
+|%
++$  action
+  $%  [%push-remote target=@p value=@ux]
+      [%push-local value=@ux]
+      [%pop-remote target=@p]
+      [%pop-local ~]
+  ==
+--
+```
+
+**`/mar/charlie/action.hoon`**
+
+```
+/-  charlie
+|_  =action:charlie
+++  grab
+  |%
+  ++  noun  action:charlie
+  --
+++  grow
+  |%
+  ++  noun  action
+  --
+++  grad  %noun
+--
+```
+
+The actions:
+
+```
+:charlie &charlie-action [%push-remote ~sampel-palnet 0xbeef]
+:charlie &charlie-action [%push-local 0xbeef]
+:charlie &charlie-action [%pop-remote ~sampel-palnet]
+:charlie &charlie-action pop-local+~
+```
+
+> ##  Graph Store and Permissions on Mars (Optional)
 >
 > Many Gall apps use Graph Store, a backend data storage format and database that both provides internally consistent data and external API communications endpoints.
 >
@@ -173,9 +230,11 @@ https://urbit.org/docs/userspace/graph-store/sample-application-overview
 >
 > Graph Store handles data access perms at the hook level, not at the store level.
 >
-> TODO
+> #### References
 >
-> https://gist.github.com/matildepark/268c758c079d6cf83fd1541b2430ff7f
+> - [Tlon Corporation, “Graph Store Overview”](https://urbit.org/docs/userspace/graph-store/overview)
+> - [Tlon Corporation, “Graph Store Sample Application:  Library”](https://urbit.org/docs/userspace/graph-store/sample-application-overview)
 {: .callout}
+
 
 {% include links.md %}
