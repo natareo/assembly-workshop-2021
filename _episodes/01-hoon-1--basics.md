@@ -138,7 +138,7 @@ The foregoing method works reasonably well when testing short snippets out, but 
 
 If we `cd` into the ship's pier in Unix and `ls` the directory contents, by default we see nothing.  With `ls -l`, a `.urb/` directory containing the ship's configuration and contents in obfuscated format becomes visible.  This directory is not interpretable by us now, so we leave it until a later discussion of the Urbit binary.  Mars doesn't know about Earth:  we can't directly edit the code in Mars, but instead have to edit on Earth and then synchronize to Mars.
 
-1. In the fakezod, run `|mount %` to mount the `%clay` filesystem to the Unix host filesystem.  (It's actually helpful to do this before you make a backup, or to go ahead and do it pre-emptively in the backup.)
+1. In the fakezod, run `|mount %home` to mount the `%clay` filesystem to the Unix host filesystem.  (It's actually helpful to do this before you make a backup, or to go ahead and do it pre-emptively in the backup.)
 2. Open a text editor and paste the program.  Save this file in `zod/home/gen/` as `fib.hoon`.
 3. In the fakezod, tell the runtime to synchronize Earth-side (Unix-side) changes back into `%clay`:  `|commit %home`.
 4. Run the generator in the Dojo as `+fib 15`.

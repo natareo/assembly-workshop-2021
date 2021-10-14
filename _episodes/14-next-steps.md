@@ -30,6 +30,10 @@ To learn more about threads, read about [Spider](https://urbit.org/docs/userspac
 
 ##  Joining the Urbit Developer Community
 
+### Discovery
+
+- [`urbit/awesome-urbit`](https://github.com/urbit/awesome-urbit)
+
 ### Contributing
 
 The Urbit ecosystem is primarily developed by Tlon Corporation, a few companies (Urbit.Live, Tirrel, dcSpark, and some hosting companies), and an army of open-source contributors.  The types of projects which you can contribute to include:
