@@ -82,7 +82,7 @@ Conventionally, most cores are either produced by the `|%` barcen rune or are in
 Some terminology is in order, to be expanded on subsequently:
 
 - An [_arm_](https://urbit.org/docs/glossary/arm) is a Hoon expression to be evaluated against the core subject (i.e. its parent core is its subject).
-- A [_leg_](https://urbit.org/docs/hoon/hoon-school/the-subject-and-its-legs) is a
+- A [_leg_](https://urbit.org/docs/hoon/hoon-school/the-subject-and-its-legs) is a data value.
 - A [_limb_](https://urbit.org/docs/hoon/reference/limbs/limb) is either an arm or a leg:  formally, “an attribute of a subject.”  A limb is resolved with
 - A [_wing_](https://urbit.org/docs/hoon/reference/limbs/wing) is a resolution path pointing to a limb.  It's a search path, like ``
 
