@@ -1,5 +1,5 @@
 ---
-title: "`%gall`:  Constructing a Novel App"
+title: "`%gall`:  Releasing an App"
 teaching: 15
 exercises: 30
 questions:
