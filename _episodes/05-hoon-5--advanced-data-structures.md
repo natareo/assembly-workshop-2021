@@ -19,7 +19,7 @@ Urbit employs a series of data structures (molds) which are either unique to the
 
 ### Units
 
-Every atom in Hoon is an unsigned integer, even if interpreted by an aura.  Auras do not carry prescriptive power, however, so they cannot be used to fundamentally distinguish a \texttt{NULL}-style or \texttt{NaN}-style non-result.  That is, if the result of a query is a `~`, how does one distinguish a value of zero from a non-result (missing value)?
+Every atom in Hoon is an unsigned integer, even if interpreted by an aura.  Auras do not carry prescriptive power, however, so they cannot be used to fundamentally distinguish a `NULL`-style or `NaN`-style non-result.  That is, if the result of a query is a `~`, how does one distinguish a value of zero from a non-result (missing value)?
 
 Units mitigate the situation by acting as a type union of `~` (for no result) and a cell `[~ u=item]` containing the returned item (with face `u`).
 

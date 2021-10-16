@@ -28,6 +28,12 @@ For a more complex single-purpose example including front-end development, you s
 
 To learn more about threads, read about [Spider](https://urbit.org/docs/userspace/threads/overview) in the docs and examine `ted/example-fetch.hoon` in your own Urbit.  Threading is particular useful for handling complicated IO outside of an agent without compromising the agent's internal state.
 
+### Concrete Next Steps
+
+1. Talk to everyone here.  Find out what's going on, what folks are working on, and how you can plug into the bigger picture.
+2. Identify new ways to use what Urbit offers within your sphere of influence and responsibility.
+3. Just start making things!  Lots of small projects are helpful for you to grow and become comfortable with the shifts in mental model and frame that Urbit affords.
+
 ##  Joining the Urbit Developer Community
 
 ### Discovery

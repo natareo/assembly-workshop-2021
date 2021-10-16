@@ -550,7 +550,7 @@ Note that, in all of these cases, you are writing a gate `|=` bartis which accep
 >
 > Write a `%say` generator which simulates scoring a simple dice throw of $n$ six-sided dice.  That is, it should return the sum of $n$ dice as inputs.  If no number is specified, then only one die roll should be returned.
 >
-> Since Hoon is functional but random number generators stateful, you should use the `=^` tisket rune to replace the current value in the RNG.  \tisket~is a kind of "one-effect monad," which allows you to change a single part of the subject.
+> Since Hoon is functional but random number generators stateful, you should use the `=^` tisket rune to replace the current value in the RNG.  `=^` tisket is a kind of "one-effect monad," which allows you to change a single part of the subject.
 >
 > For instance, here is a `%say` generator that returns a list of _n_ probabilities between 0–100%.
 >

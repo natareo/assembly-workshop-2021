@@ -26,7 +26,7 @@ An atom is an unsigned integer of any size.  (It may be fruitful for you to thin
 
 Atoms have tags called _auras_ which can be used coercively or noncoercively to represent single-valued data.  In other words, an aura is a bit of metadata Hoon attaches to a value which tells Urbit how you intend to use a number.  The default aura for a value is `@ud`, unsigned decimal, but of course there are many more.  Aura operations are extremely convenient for converting between representations.  They are also used to enforce type constraints on atoms in expressions and gates.
 
-For instance, to a machine there is no fundamental difference between binary `0x11011001`, decimal `217`, and hexadecimal `0xD9`.  A human coder recognizes them as different encoding schemes and associates tacit information with each:  an assembler instruction, an integer value, a memory address.  Hoon offers two ways of designating values with auras:  either directly by the input formatting of the number (such as \texttt{0b1101.1001}) or using the irregular syntax ``@``:
+For instance, to a machine there is no fundamental difference between binary `0x11011001`, decimal `217`, and hexadecimal `0xD9`.  A human coder recognizes them as different encoding schemes and associates tacit information with each:  an assembler instruction, an integer value, a memory address.  Hoon offers two ways of designating values with auras:  either directly by the input formatting of the number (such as `0b1101.1001`) or using the irregular syntax ``@``:
 
 ```
 0b1101.1001
@@ -223,7 +223,7 @@ i='o'
 t=""
 ```
 
-Finally, the most general mold is \texttt{*} which simply matches any noun—and thus anything in Hoon at all.  The `*` applied to a value yields the _bunt_, or default empty definition.
+Finally, the most general mold is `*` which simply matches any noun—and thus anything in Hoon at all.  The `*` applied to a value yields the _bunt_, or default empty definition.
 
 ```
 > *@ud
@@ -260,7 +260,7 @@ Finally, the most general mold is \texttt{*} which simply matches any noun—and
 > {: .source}
 >
 >
-> We call Hoon's data type specifications \emph{molds}.  Molds are more general than atoms and cells, but these form particular cases.  Hoon uses molds as a way of matching Nock tree structures (including Hoon metadata tags such as auras).
+> We call Hoon's data type specifications _molds_.  Molds are more general than atoms and cells, but these form particular cases.  Hoon uses molds as a way of matching Nock tree structures (including Hoon metadata tags such as auras).
 {: .callout}
 
 
