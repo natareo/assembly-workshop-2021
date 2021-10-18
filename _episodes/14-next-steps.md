@@ -56,7 +56,7 @@ If you have not participated in an open-source project before, please check thes
 
 - [Gregory V. Wilson, “Joining a Project”](https://third-bit.com/2021/03/30/joining-a-project/) (good advice from my mentor)
 - [Zara Cooper, “Getting started with contributing to open source”](https://stackoverflow.blog/2020/08/03/getting-started-with-contributing-to-open-source/) (more generic advice from SO)
-- [Philip Monk `~wisdev-wicryt`, “Urbit Precepts”](https://urbit.org/blog/precepts) (the philosophy underlying Urbit's architectural decisions)
+- [Philip Monk `~wicdev-wisryt`, “Urbit Precepts”](https://urbit.org/blog/precepts) (the philosophy underlying Urbit's architectural decisions)
 
 ### Main Groups
 
