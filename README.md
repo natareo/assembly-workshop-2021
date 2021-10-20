@@ -5,12 +5,10 @@
 
 ##  Objectives
 
-1. Program literately using the Hoon language, including source code conventions and interoperability.
-2. Explain and navigate the schematics and technical implementation of the Urbit OS kernel (Arvo and vanes).
-3. Construct novel userspace apps to run on the Urbit OS platform (Gall, Landscape).
-4. Sign and distribute working apps through an Urbit-backed software development service.
-
-We will _not_ deal with Azimuth, parsing, many aspects of generators, event logs, runtime issues, and many other aspects of fully grokking Urbit.
+1. Program using Hoon.
+2. Explain and navigate the schematics of the Urbit OS kernel (Arvo and vanes).
+3. Build userspace apps to run on Urbit OS.
+4. Distribute working apps on Urbit.
 
 
 ##  Audience
@@ -20,8 +18,6 @@ Software developers in attendance at Assembly in Austin, Texas.  These all have 
 1. Those with little to no experience with software development in Hoon and on the Urbit platform.
 2. Those with Hoon School-tier exposure to the Hoon programming language.
 
-We have capped the workshop at 90 participants for classroom management.
-
 
 ##  Outline
 
@@ -30,7 +26,7 @@ NO LESSON PLAN SURVIVES CONTACT WITH THE CLASSROOM _but_ our meta goals for each
 - **Day 1** To have you thinking in terms of symbols and computational trees.
 - **Day 2** To have you thinking in terms of agent operations.
 
-We're not going to argue about why something is the way it is.  Hoon has been written, and for most of the things you encounter there is a reasoned motivation for why the decision was made to structure it the way it is.  You may disagree with that motivation, but that's an entirely separate discussion.  This .. is .. HOON!!!
+We're not going to argue about why something is the way it is.  Hoon has been written, and for most of the things you encounter there is a reasoned motivation for why the decision was made to structure it the way it is.  You may disagree with that motivation, but that's an entirely separate discussion.
 
 - Hoon (_The Hoon section aims to teach the ~25 most common runes, the core pattern, and code building._)
   - Basic runes
@@ -61,8 +57,6 @@ The event should be hands-on.  In particular, if we can figure out a rapid way o
 
 
 ##  Detailed Outline
-
-_(Work in progress; notably, breaks and hands-on components are not yet laid out.)_
 
 1. Hoon (3¼ hours)
     1. Runes & basic programs (45 min)
