@@ -117,13 +117,13 @@ Remote subscriptions are in common use.
         [%push-local @ux]
       ~&  >  "got poked from {<src.bowl>} with val: {<+.q.vase>}"
       =^  cards  state
-      (handle-action:main !<(action:charlie vase))
+      (handle-action:main ;;(action:charlie q.vase))
       [cards this]
       ::
         [%pop-local ~]
       ~&  >  "got poked from {<src.bowl>} with val: {<+.q.vase>}"
       =^  cards  state
-      (handle-action:main !<(action:charlie vase))
+      (handle-action:main ;;(action:charlie q.vase))
       [cards this]
     ==
     ::
